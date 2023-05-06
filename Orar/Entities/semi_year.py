@@ -1,7 +1,6 @@
-import enum
-
-
-class SemiYear(enum.Enum):
-    A = 1
-    B = 2
-    E = 3
+class StudyYear:
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+        self.students = []
+        self.scheduled_entries = []

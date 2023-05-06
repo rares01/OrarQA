@@ -1,10 +1,6 @@
-import enum
-
-
-class TimeSlot(enum.Enum):
-    FIRST_HOUR = 8
-    SECOND_HOUR = 10
-    THIRD_HOUR = 12
-    FOURTH_HOUR = 14
-    FIFTH_HOUR = 16
-    SIXTH_HOUR = 18
+class TimeSlot:
+    def __init__(self, id: int, start_hour: int, end_hour: int):
+        self.id = id
+        self.start_hour = start_hour
+        self.end_hour = end_hour
+        self.scheduled_entries = []

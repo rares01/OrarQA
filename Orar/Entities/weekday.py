@@ -1,9 +1,5 @@
-import enum
-
-
-class Weekday(enum.Enum):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    THURSDAY = 4
-    FRIDAY = 5
+class Weekday:
+    def __init__(self, id: int, day: str):
+        self.id = id
+        self.day = day
+        self.scheduler_entries = []

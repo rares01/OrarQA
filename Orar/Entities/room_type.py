@@ -1,7 +1,5 @@
-import enum
-
-
-class RoomType(enum.Enum):
-    COURSE = 1
-    SEMINARY = 2
-    LABORATORY = 3
+class RoomType:
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+        self.rooms = []
