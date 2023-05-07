@@ -1,5 +1,5 @@
 # This is a sample Python script.
-from DbContext import DbContext
+from dbcontext import DbContext
 
 
 # Press Shift+F10 to execute it or replace it with your code.

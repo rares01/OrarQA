@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Orar.iml" filepath="$PROJECT_DIR$/.idea/Orar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/OrarQA.iml" filepath="$PROJECT_DIR$/.idea/OrarQA.iml" />
     </modules>
   </component>
 </project>

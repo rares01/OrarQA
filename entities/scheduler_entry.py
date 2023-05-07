@@ -1,6 +1,6 @@
-from Entities.study_year import StudyYear
-from Entities.time_slot import TimeSlot
-from Entities.weekday import Weekday
+from entities.study_year import StudyYear
+from entities.time_slot import TimeSlot
+from entities.weekday import Weekday
 
 
 class SchedulerEntry:
