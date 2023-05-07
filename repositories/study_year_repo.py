@@ -1,7 +1,7 @@
 from dbcontext import connection
 
 
-def get_study_years():
+def get_study_years_values():
     conn = connection()
     cur = conn.cursor()
 

@@ -1,7 +1,7 @@
 from dbcontext import connection
 
 
-def get_student_groups():
+def get_student_groups_values():
     conn = connection()
     cur = conn.cursor()
 

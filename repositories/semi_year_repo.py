@@ -1,7 +1,7 @@
 from dbcontext import connection
 
 
-def get_semi_years():
+def get_semi_years_values():
     conn = connection()
     cur = conn.cursor()
 

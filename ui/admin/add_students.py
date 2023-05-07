@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-from repositories.semi_year_repo import get_semi_years
-from repositories.student_group_repo import get_student_groups
+from repositories.semi_year_repo import get_semi_years_values
+from repositories.student_group_repo import get_student_groups_values
 from repositories.student_repo import add_student
-from repositories.study_year_repo import get_study_years
+from repositories.study_year_repo import get_study_years_values
 
 
 def handle():
@@ -35,17 +35,17 @@ student_group_label = ttk.Label(root, text="Student Group:")
 first_name_entry = ttk.Entry(root)
 last_name_entry = ttk.Entry(root)
 
-study_year_ids = get_study_years()
+study_year_ids = get_study_years_values()
 study_year_var = tk.StringVar(root)
 study_year_var.set(study_year_ids[0])
 study_year_dropdown = ttk.Combobox(root, textvariable=study_year_var, values=study_year_ids, state='readonly')
 
-semi_year_ids = get_semi_years()
+semi_year_ids = get_semi_years_values()
 semi_year_var = tk.StringVar(root)
 semi_year_var.set(semi_year_ids[0])
 semi_year_dropdown = ttk.Combobox(root, textvariable=semi_year_var, values=semi_year_ids, state='readonly')
 
-student_group_ids = get_student_groups()
+student_group_ids = get_student_groups_values()
 student_group_var = tk.StringVar(root)
 student_group_var.set(student_group_ids[0])
 student_group_dropdown = ttk.Combobox(root, textvariable=student_group_var, values=student_group_ids, state='readonly')
