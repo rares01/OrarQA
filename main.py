@@ -15,7 +15,7 @@ class MainApplication(tk.Tk):
 
     def create_frames(self):
         self.frames = {}
-        for F in (HomePage, TimeTablePage, AdminPage):
+        for F in (HomePage, TimeTablePage):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

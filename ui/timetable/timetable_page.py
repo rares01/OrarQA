@@ -1,5 +1,6 @@
 import tkinter as tk
-from ui.home.home_page import HomePage
+
+import ui.home.home_page as Home
 
 
 class TimeTablePage(tk.Frame):
@@ -26,4 +27,4 @@ class TimeTablePage(tk.Frame):
         self.back_button.grid(row=3, column=0)
 
     def go_to_home(self):
-        self.master.switch_frame(HomePage)
+        self.master.switch_frame(Home.HomePage)
