@@ -1,9 +1,14 @@
 import tkinter as tk
 from ui.home.home_page import HomePage
 
+
 class TimeTablePage(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.back_button = None
+        self.see_timetable_button = None
+        self.create_timetable_button = None
+        self.title_label = None
         self.master = master
         self.create_widgets()
 

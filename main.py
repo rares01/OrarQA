@@ -1,4 +1,6 @@
 import tkinter as tk
+
+from ui.admin.admin_page import AdminPage
 from ui.home.home_page import HomePage
 from ui.timetable.timetable_page import TimeTablePage
 
@@ -6,13 +8,14 @@ from ui.timetable.timetable_page import TimeTablePage
 class MainApplication(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.frames = None
         self.title("Timetable Application")
-        self.geometry("400x300")
+        self.geometry("800x600")
         self.create_frames()
 
     def create_frames(self):
         self.frames = {}
-        for F in (HomePage, TimeTablePage):
+        for F in (HomePage, TimeTablePage, AdminPage):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

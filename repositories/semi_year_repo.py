@@ -25,3 +25,16 @@ def get_id_by_value(name):
     conn.close()
 
     return [row[0] for row in rows][0]
+
+
+def get_value_by_id(id):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT name FROM semiyear WHERE id=%s", (id,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [row[0] for row in rows][0]
