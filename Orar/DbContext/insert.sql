@@ -78,4 +78,12 @@ VALUES ('B');
 INSERT INTO SemiYear (name)
 VALUES ('E');
 
+INSERT INTO Student (first_name, last_name, study_year_id, semi_year_id, student_group_id)
+VALUES ('Alice', 'Smith', 1, 1, 1);
+INSERT INTO Student (first_name, last_name, study_year_id, semi_year_id, student_group_id)
+VALUES ('Bob', 'Jones', 1, 1, 1);
+INSERT INTO Student (first_name, last_name, study_year_id, semi_year_id, student_group_id)
+VALUES ('Adrian', 'Smau', 1, 1, 2);
+INSERT INTO Student (first_name, last_name, study_year_id, semi_year_id, student_group_id)
+VALUES ('Rares', 'Gramescu', 1, 1, 2);
 
