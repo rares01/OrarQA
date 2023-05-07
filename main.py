@@ -1,20 +1,28 @@
-# This is a sample Python script.
-from dbcontext import DbContext
+import tkinter as tk
+from ui.home.home_page import HomePage
+from ui.timetable.timetable_page import TimeTablePage
 
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+class MainApplication(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Timetable Application")
+        self.geometry("400x300")
+        self.create_frames()
+
+    def create_frames(self):
+        self.frames = {}
+        for F in (HomePage, TimeTablePage):
+            frame = F(self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.switch_frame(HomePage)
+
+    def switch_frame(self, frame_class):
+        frame = self.frames[frame_class]
+        frame.tkraise()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-    db_context = DbContext()
-    db_context.initiliaze()
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+app = MainApplication()
+app.mainloop()
