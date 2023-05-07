@@ -1,6 +1,23 @@
 from dbcontext import connection
+from entities.student_group import StudentGroup
 
 
+def get_student_groups():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM studentgroup")
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    student_groups = []
+    for row in rows:
+        student_group = StudentGroup(*row)
+        student_groups.append(student_group)
+
+    return student_groups
 def get_student_groups_values():
     conn = connection()
     cur = conn.cursor()
