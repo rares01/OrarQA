@@ -1,10 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 
+from ui.admin.views.students_views import StudentsView
+import ui.home.home_page as home
+
 
 class AdminPage(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.back_button = None
         self.title_label = None
         self.style = None
         self.master = master
@@ -16,7 +20,7 @@ class AdminPage(tk.Frame):
         self.style.configure("TFrame", padding=10)
         self.style.configure("TButton", font=("Helvetica", 12), padding=10)
 
-        self.title_label = ttk.Label(self, text="Timetable Admin page", style="TLabel")
+        self.title_label = ttk.Label(self, text="Admin Page", style="TLabel")
         self.title_label.pack()
         names = ["Students", "Groups", "Teachers", "Disciplines", "Rooms"]
         for name in names:
@@ -30,6 +34,12 @@ class AdminPage(tk.Frame):
                                      command=lambda entity_name=name: self.redirect_to_views(entity_name),
                                      style="TButton")
             view_button.pack(side="left")
+        self.back_button = ttk.Button(self, text="Back", command=self.go_to_home, style="TButton")
+        self.back_button.pack(side="bottom")
 
     def redirect_to_views(self, entity_name):
-        print(entity_name)
+        if entity_name == "Students":
+            self.master.switch_frame(StudentsView)
+        
+    def go_to_home(self):
+        self.master.switch_frame(home.HomePage)
