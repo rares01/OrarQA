@@ -23,11 +23,11 @@ class DisciplinesView(tk.Frame):
         title_label = ttk.Label(self, text="Disciplines View", font=("Helvetica", 20))
         title_label.pack(pady=20)
 
-        self.tree = ttk.Treeview(self, columns=("ID", "Name"),
+        self.tree = ttk.Treeview(self, columns=("ID", "Name", "Year", "Teacher"),
                                  show="headings")
         self.tree.pack(padx=10, pady=10, fill="both", expand=True)
 
-        for col in ("ID", "Name"):
+        for col in ("ID", "Name", "Year", "Teacher"):
             self.tree.heading(col, text=col, anchor="center")
 
         style = ttk.Style()
@@ -35,16 +35,18 @@ class DisciplinesView(tk.Frame):
         style.configure("Treeview", font=("Helvetica", 12))
 
         for discipline in disciplines:
-            self.tree.insert("", "end", values=(discipline.id, discipline.name))
+            self.tree.insert("", "end", values=(
+            discipline.id, discipline.name, discipline.study_year, discipline.teacher_full_name))
 
         self.add_button = ttk.Button(self, text="Add", command=self.add_discipline, style="Custom.TButton")
         self.add_button.pack(side="top", pady=10)
 
         self.edit_button = ttk.Button(self, text="Edit", command=self.edit_discipline, state="disabled", style="Custom"
-                                                                                                            ".TButton")
+                                                                                                               ".TButton")
         self.edit_button.pack(side="left", padx=10, pady=10)
 
-        self.delete_button = ttk.Button(self, text="Delete", command=self.delete_discipline, state="disabled", style="Custom.TButton")
+        self.delete_button = ttk.Button(self, text="Delete", command=self.delete_discipline, state="disabled",
+                                        style="Custom.TButton")
         self.delete_button.pack(side="left", padx=10, pady=10)
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="Custom.TButton")
@@ -52,7 +54,8 @@ class DisciplinesView(tk.Frame):
 
         self.tree.bind("<ButtonRelease-1>", self.on_tree_select)
 
-        style.configure("Custom.TButton", font=("Helvetica", 12), background="#d8d8d8", foreground="#333", borderwidth=0, focuscolor="#d8d8d8", lightcolor="#d8d8d8", darkcolor="#d8d8d8")
+        style.configure("Custom.TButton", font=("Helvetica", 12), background="#d8d8d8", foreground="#333",
+                        borderwidth=0, focuscolor="#d8d8d8", lightcolor="#d8d8d8", darkcolor="#d8d8d8")
 
     def on_tree_select(self, event):
         selection = self.tree.selection()

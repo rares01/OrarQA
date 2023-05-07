@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.views.students_views as view
-
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
 from repositories.student_repo import add_student
@@ -64,7 +63,9 @@ class AddStudentForm(tk.Frame):
         semi_year_dropdown.pack()
         student_group_label.pack()
         student_group_dropdown.pack()
-        add_student_button = ttk.Button(self, text="Add", command=handle)
+        add_student_button = ttk.Button(self, text="Add",
+                                        command=lambda: handle(first_name_entry, last_name_entry, study_year_var,
+                                                               semi_year_var, student_group_var))
         add_student_button.pack()
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="TButton")
