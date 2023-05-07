@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from ui.admin.views.students_views import StudentsView
 import ui.home.home_page as home
+from ui.admin.views.disciplines_view import DisciplinesView
 
 
 class AdminPage(tk.Frame):
@@ -40,6 +41,10 @@ class AdminPage(tk.Frame):
     def redirect_to_views(self, entity_name):
         if entity_name == "Students":
             self.master.switch_frame(StudentsView)
+
+        elif entity_name == "Disciplines":
+            self.master.switch_frame(DisciplinesView)
+
         
     def go_to_home(self):
         self.master.switch_frame(home.HomePage)

@@ -6,7 +6,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 def connection():
     conn = psycopg2.connect(
         host='localhost',
-        port='5433',
+        port='5432',
         user='power-user',
         password='root',
         database='Orar'
