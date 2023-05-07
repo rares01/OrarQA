@@ -1,6 +1,4 @@
 from dbcontext import connection
-
-from dbcontext import connection
 from entities.student_group import StudentGroup
 
 
@@ -8,7 +6,7 @@ def get_student_groups():
     conn = connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM discipline")
+    cur.execute("SELECT * FROM studentgroup")
     rows = cur.fetchall()
 
     cur.close()

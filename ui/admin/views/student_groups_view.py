@@ -19,14 +19,14 @@ class StudentGroupsView(tk.Frame):
     def display(self):
         groups = get_student_groups()
 
-        title_label = ttk.Label(self, text="Disciplines View", font=("Helvetica", 20))
+        title_label = ttk.Label(self, text="Student Groups View", font=("Helvetica", 20))
         title_label.pack(pady=20)
 
-        self.tree = ttk.Treeview(self, columns=("ID", "Name"),
+        self.tree = ttk.Treeview(self, columns=("ID", "Number"),
                                  show="headings")
         self.tree.pack(padx=10, pady=10, fill="both", expand=True)
 
-        for col in ("ID", "Name"):
+        for col in ("ID", "Number"):
             self.tree.heading(col, text=col, anchor="center")
 
         style = ttk.Style()
@@ -34,7 +34,7 @@ class StudentGroupsView(tk.Frame):
         style.configure("Treeview", font=("Helvetica", 12))
 
         for group in groups:
-            self.tree.insert("", "end", values=(group.id, group.name))
+            self.tree.insert("", "end", values=(group.id, group.number))
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="Custom.TButton")
         self.back_button.pack(side="right", padx=10, pady=10)

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from ui.admin.views.student_groups_view import StudentGroupsView
 from ui.admin.views.students_views import StudentsView
 import ui.home.home_page as home
 from ui.admin.views.disciplines_view import DisciplinesView
@@ -44,6 +45,10 @@ class AdminPage(tk.Frame):
 
         elif entity_name == "Disciplines":
             self.master.switch_frame(DisciplinesView)
+
+        elif entity_name == "Groups":
+            self.master.switch_frame(StudentGroupsView)
+
 
         
     def go_to_home(self):

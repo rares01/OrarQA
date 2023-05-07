@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b430a4c4-3023-49df-82b1-a81e9bbd8bda" name="Changes" comment="refactored and added first flow">
-      <change beforePath="$PROJECT_DIR$/.idea/OrarQA.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OrarQA.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbcontext/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dbcontext/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repositories/student_group_repo.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/student_group_repo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/admin/admin_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/admin/admin_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/admin/views/student_groups_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/admin/views/student_groups_view.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -4,6 +4,7 @@ from ui.admin.admin_page import AdminPage
 from ui.admin.forms.students.add_students import AddStudentForm
 from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
 from ui.admin.views.disciplines_view import DisciplinesView
+from ui.admin.views.student_groups_view import StudentGroupsView
 from ui.admin.views.students_views import StudentsView
 from ui.home.home_page import HomePage
 from ui.timetable.timetable_page import TimeTablePage
@@ -19,7 +20,8 @@ class MainApplication(tk.Tk):
 
     def create_frames(self):
         self.frames = {}
-        for F in (HomePage, TimeTablePage, AdminPage, StudentsView, AddStudentForm, DisciplinesView, AddDisciplineForm):
+        for F in (HomePage, TimeTablePage, AdminPage, StudentsView, AddStudentForm, DisciplinesView, AddDisciplineForm,
+                  StudentGroupsView):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
