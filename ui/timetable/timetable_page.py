@@ -1,6 +1,7 @@
 import tkinter as tk
 
-import ui.home.home_page as Home
+import ui.home.home_page as home
+import ui.timetable.create_timetable as create_timetable
 
 
 class TimeTablePage(tk.Frame):
@@ -17,7 +18,7 @@ class TimeTablePage(tk.Frame):
         self.title_label = tk.Label(self, text="Timetable Page")
         self.title_label.grid(row=0, column=0)
 
-        self.create_timetable_button = tk.Button(self, text="CREATE TIMETABLE")
+        self.create_timetable_button = tk.Button(self, text="CREATE TIMETABLE", command=self.go_to_create)
         self.create_timetable_button.grid(row=1, column=0)
 
         self.see_timetable_button = tk.Button(self, text="SEE TIMETABLE")
@@ -27,4 +28,7 @@ class TimeTablePage(tk.Frame):
         self.back_button.grid(row=3, column=0)
 
     def go_to_home(self):
-        self.master.switch_frame(Home.HomePage)
+        self.master.switch_frame(home.HomePage)
+
+    def go_to_create(self):
+        self.master.switch_frame(create_timetable.CreateTimetable)

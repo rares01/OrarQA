@@ -31,7 +31,7 @@ def get_value_by_id(id):
     conn = connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT name FROM studyyear WHERE id=%s", (id,))
+    cur.execute("SELECT number FROM studyyear WHERE id=%s", (id,))
     rows = cur.fetchall()
 
     cur.close()

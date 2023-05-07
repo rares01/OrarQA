@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-from repositories.student_repo import get_students
+from repositories.discipline_repo import get_disciplines
 import ui.admin.admin_page as admin
-from ui.admin.forms.students.add_students import AddStudentForm
+from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
 
 
-class StudentsView(tk.Frame):
+class DisciplinesView(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.back_button = None
@@ -18,34 +18,33 @@ class StudentsView(tk.Frame):
         self.display()
 
     def display(self):
-        students = get_students()
+        disciplines = get_disciplines()
 
-        title_label = ttk.Label(self, text="Students View", font=("Helvetica", 20))
+        title_label = ttk.Label(self, text="Disciplines View", font=("Helvetica", 20))
         title_label.pack(pady=20)
 
-        self.tree = ttk.Treeview(self, columns=("ID", "First Name", "Last Name", "Study Year", "Semi Year", "Student "
-                                                                                                            "Group"),
+        self.tree = ttk.Treeview(self, columns=("ID", "Name"),
                                  show="headings")
         self.tree.pack(padx=10, pady=10, fill="both", expand=True)
 
-        for col in ("ID", "First Name", "Last Name", "Study Year", "Semi Year", "Student Group"):
+        for col in ("ID", "Name"):
             self.tree.heading(col, text=col, anchor="center")
 
         style = ttk.Style()
         style.configure("Treeview.Heading", font=("Helvetica", 16))
         style.configure("Treeview", font=("Helvetica", 12))
 
-        for student in students:
-            self.tree.insert("", "end", values=(student.id, student.first_name, student.last_name, student.study_year, student.semi_year, student.student_group))
+        for discipline in disciplines:
+            self.tree.insert("", "end", values=(discipline.id, discipline.name))
 
-        self.add_button = ttk.Button(self, text="Add", command=self.add_student, style="Custom.TButton")
+        self.add_button = ttk.Button(self, text="Add", command=self.add_discipline, style="Custom.TButton")
         self.add_button.pack(side="top", pady=10)
 
-        self.edit_button = ttk.Button(self, text="Edit", command=self.edit_student, state="disabled", style="Custom"
+        self.edit_button = ttk.Button(self, text="Edit", command=self.edit_discipline, state="disabled", style="Custom"
                                                                                                             ".TButton")
         self.edit_button.pack(side="left", padx=10, pady=10)
 
-        self.delete_button = ttk.Button(self, text="Delete", command=self.delete_student, state="disabled", style="Custom.TButton")
+        self.delete_button = ttk.Button(self, text="Delete", command=self.delete_discipline, state="disabled", style="Custom.TButton")
         self.delete_button.pack(side="left", padx=10, pady=10)
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="Custom.TButton")
@@ -64,20 +63,20 @@ class StudentsView(tk.Frame):
             self.edit_button.config(state="disabled")
             self.delete_button.config(state="disabled")
 
-    def add_student(self):
-        self.master.switch_frame(AddStudentForm)
+    def add_discipline(self):
+        self.master.switch_frame(AddDisciplineForm)
 
     def go_back(self):
         self.master.switch_frame(admin.AdminPage)
 
-    def edit_student(self):
+    def edit_discipline(self):
         selection = self.tree.selection()
         if selection:
             values = self.tree.item(selection)["values"]
-            print(f"Edit student {values[1]} {values[2]}")
+            print(f"Edit discipline {values[0]} {values[1]}")
 
-    def delete_student(self):
+    def delete_discipline(self):
         selection = self.tree.selection()
         if selection:
             values = self.tree.item(selection)["values"]
-            print(f"Delete student {values[1]} {values[2]}")
+            print(f"Delete discipline {values[0]} {values[1]}")

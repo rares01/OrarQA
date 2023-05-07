@@ -1,7 +1,7 @@
 import tkinter as tk
 
-from ui.admin.admin_page import AdminPage
-from ui.timetable.timetable_page import TimeTablePage
+import ui.admin.admin_page as admin
+import ui.timetable.timetable_page as timetable
 
 
 class HomePage(tk.Frame):
@@ -24,7 +24,7 @@ class HomePage(tk.Frame):
         self.timetable_button.grid(row=2, column=0)
 
     def go_to_admin_page(self):
-        self.master.switch_frame(AdminPage)
+        self.master.switch_frame(admin.AdminPage)
 
     def go_to_timetable(self):
-        self.master.switch_frame(TimeTablePage)
+        self.master.switch_frame(timetable.TimeTablePage)
