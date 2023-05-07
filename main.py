@@ -21,6 +21,7 @@ class MainApplication(tk.Tk):
 
     def create_frames(self):
         self.frames = {}
+
         for F in (HomePage, TimeTablePage, AdminPage, StudentsView, AddStudentForm, DisciplinesView, AddDisciplineForm,
                   StudentGroupsView, CreateTimetable):
             frame = F(self)

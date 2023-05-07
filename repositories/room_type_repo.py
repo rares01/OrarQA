@@ -26,4 +26,3 @@ def get_id_by_value(name):
     return [row[0] for row in rows][0]
 
 
-

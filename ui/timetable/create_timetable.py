@@ -89,6 +89,7 @@ class CreateTimetable(tk.Frame):
 
         # Create a dropdown menu for time slot
         self.time_options = get_time_slot_values()
+        self.time_options = ["8:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"]
         time_var = tk.StringVar()
         time_var.set(self.time_options[0])
         time_dropdown = ttk.OptionMenu(window, time_var, *self.time_options)
@@ -110,6 +111,7 @@ class CreateTimetable(tk.Frame):
 
         # Create a dropdown menu for type
         self.type_options = get_room_type_values()
+        self.type_options = ["course", "laboratory", "seminary"]
         type_var = tk.StringVar()
         type_var.set(self.type_options[0])
         type_dropdown = ttk.OptionMenu(window, type_var, *self.type_options)
@@ -131,6 +133,7 @@ class CreateTimetable(tk.Frame):
 
         # Create a dropdown menu for room
         self.room_options = get_room_values()
+        self.room_options = ["C11", "S11", "C3"]
         room_var = tk.StringVar()
         room_var.set(self.room_options[0])
         room_dropdown = ttk.OptionMenu(window, room_var, *self.room_options)

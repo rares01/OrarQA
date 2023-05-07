@@ -16,4 +16,3 @@ def get_time_slot_values():
 
     return [f"{start_hour[i]}-{end_hour[i]}" for i in range(len(start_hour))]
 
-
