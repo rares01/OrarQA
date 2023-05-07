@@ -41,10 +41,6 @@ class DisciplinesView(tk.Frame):
         self.add_button = ttk.Button(self, text="Add", command=self.add_discipline, style="Custom.TButton")
         self.add_button.pack(side="top", pady=10)
 
-        self.edit_button = ttk.Button(self, text="Edit", command=self.edit_discipline, state="disabled", style="Custom"
-                                                                                                               ".TButton")
-        self.edit_button.pack(side="left", padx=10, pady=10)
-
         self.delete_button = ttk.Button(self, text="Delete", command=self.delete_discipline, state="disabled",
                                         style="Custom.TButton")
         self.delete_button.pack(side="left", padx=10, pady=10)
@@ -72,11 +68,6 @@ class DisciplinesView(tk.Frame):
     def go_back(self):
         self.master.switch_frame(admin.AdminPage)
 
-    def edit_discipline(self):
-        selection = self.tree.selection()
-        if selection:
-            values = self.tree.item(selection)["values"]
-            print(f"Edit discipline {values[0]} {values[1]}")
 
     def delete_discipline(self):
         selection = self.tree.selection()

@@ -63,3 +63,35 @@ def get_teachers():
         teachers.append(teacher)
 
     return teachers
+
+def get_full_teachers():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM teacher")
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    teachers = []
+    for row in rows:
+        teacher = Teacher(*row)
+        teachers.append(teacher)
+
+    return teachers
+
+
+def add_teacher(first_name, last_name):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "INSERT INTO teacher (first_name, last_name) VALUES (%s,%s)",
+        (first_name, last_name))
+    conn.commit()
+
+    print("Teacher added!")
+
+    cur.close()
+    conn.close()
