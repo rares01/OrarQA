@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.timetable.timetable_page as timetable
+from repositories.room_repo import get_room_values
+from repositories.room_type_repo import get_room_type_values
+from repositories.time_slot_repo import get_time_slot_values
 
 
 class CreateTimetable(tk.Frame):
@@ -85,6 +88,7 @@ class CreateTimetable(tk.Frame):
         label1.pack(pady=5, anchor="w")
 
         # Create a dropdown menu for time slot
+        self.time_options = get_time_slot_values()
         self.time_options = ["8:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"]
         time_var = tk.StringVar()
         time_var.set(self.time_options[0])
@@ -106,6 +110,7 @@ class CreateTimetable(tk.Frame):
         label3.pack(pady=5, anchor="w")
 
         # Create a dropdown menu for type
+        self.type_options = get_room_type_values()
         self.type_options = ["course", "laboratory", "seminary"]
         type_var = tk.StringVar()
         type_var.set(self.type_options[0])
@@ -127,6 +132,7 @@ class CreateTimetable(tk.Frame):
         label5.pack(pady=5, anchor="w")
 
         # Create a dropdown menu for room
+        self.room_options = get_room_values()
         self.room_options = ["C11", "S11", "C3"]
         room_var = tk.StringVar()
         room_var.set(self.room_options[0])

@@ -1,4 +1,5 @@
 from dbcontext import connection
+from repositories.room_type_repo import get_id_by_value
 
 
 def get_room_values():
@@ -6,6 +7,19 @@ def get_room_values():
     cur = conn.cursor()
 
     cur.execute("SELECT name FROM room")
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [row[0] for row in rows]
+
+
+def get_rooms_by_room_type(room_type):
+    conn = connection()
+    cur = conn.cursor()
+    room_type_id = get_id_by_value(room_type)
+    cur.execute("SELECT name FROM room WHERE room_type_id=%s", (room_type_id,))
     rows = cur.fetchall()
 
     cur.close()
@@ -40,15 +54,4 @@ def get_value_by_id(id):
     return [row[0] for row in rows][0]
 
 
-def get_rooms_by_room_type(room_type_id):
-    conn = connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT name FROM room WHERE room_type_id=%s", (room_type_id,))
-    rows = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return [row[0] for row in rows]
 
