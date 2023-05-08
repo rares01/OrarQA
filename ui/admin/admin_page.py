@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from ui.admin.views.students_views import StudentsView
+from ui.admin.views.students_view import StudentsView
 import ui.home.home_page as home
 from ui.admin.views.disciplines_view import DisciplinesView
 from ui.admin.views.teachers_view import TeachersView

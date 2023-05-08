@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ui.admin.views.students_views as view
+import ui.admin.views.students_view as view
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
 from repositories.student_repo import add_student, get_students

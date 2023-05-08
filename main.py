@@ -5,7 +5,7 @@ from ui.admin.forms.students.add_students import AddStudentForm
 from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
 from ui.admin.forms.teachers.add_teacher_form import AddTeacherForm
 from ui.admin.views.disciplines_view import DisciplinesView
-from ui.admin.views.students_views import StudentsView
+from ui.admin.views.students_view import StudentsView
 from ui.admin.views.teachers_view import TeachersView
 from ui.home.home_page import HomePage
 from ui.timetable.timetable_page import TimeTablePage
