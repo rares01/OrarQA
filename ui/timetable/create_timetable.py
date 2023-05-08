@@ -10,6 +10,9 @@ from repositories.time_slot_repo import get_time_slot_values
 class CreateTimetable(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.group_options = None
+        self.semi_year_options = None
+        self.year_options = None
         self.label_room = None
         self.label_professor = None
         self.label_type = None
@@ -138,6 +141,33 @@ class CreateTimetable(tk.Frame):
         room_var.set(self.room_options[0])
         room_dropdown = ttk.OptionMenu(window, room_var, *self.room_options)
         room_dropdown.pack(pady=5)
+
+        label6 = tk.Label(window, text="Year:")
+        label6.pack(pady=5, anchor="w")
+
+        self.year_options = ["Anul 1", "Anul 2", "Anul 3"]
+        year_var = tk.StringVar()
+        year_var.set(self.year_options[0])
+        year_dropdown = ttk.OptionMenu(window, year_var, *self.year_options)
+        year_dropdown.pack(pady=5)
+
+        label7 = tk.Label(window, text="Semi Year:")
+        label7.pack(pady=5, anchor="w")
+
+        self.semi_year_options = ["Seria 1A", "Seria 1B", "Seria 1C"]
+        semi_year_var = tk.StringVar()
+        semi_year_var.set(self.semi_year_options[0])
+        semi_year_dropdown = ttk.OptionMenu(window, semi_year_var, *self.semi_year_options)
+        semi_year_dropdown.pack(pady=5)
+
+        label7 = tk.Label(window, text="Group:")
+        label7.pack(pady=5, anchor="w")
+
+        self.group_options = ["None", "Grupa 1", "Grupa 2", "Grupa 3"]
+        group_var = tk.StringVar()
+        group_var.set(self.group_options[0])
+        group_dropdown = ttk.OptionMenu(window, group_var, *self.group_options)
+        group_dropdown.pack(pady=5)
 
         # Create a function to handle form submission
         def submit_form():
