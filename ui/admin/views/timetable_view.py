@@ -1,12 +1,12 @@
 import tkinter as tk
+import webbrowser
 from tkinter import ttk
 
-import ui.admin.admin_page as admin
+import ui.home.home_page as home
 from repositories.discipline_repo import get_disciplines_value
-from repositories.scheduler_entry_repo import get_entries
+from repositories.scheduler_entry_repo import get_entries, get_entries_with_entity
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
-from repositories.student_repo import get_students, delete_student
 from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 from repositories.time_slot_repo import get_time_slot_values
@@ -14,9 +14,35 @@ from repositories.weekdays_repo import get_weekdays_values
 from ui.admin.forms.timetable.add_timetable_entry import AddTimetableEntryForm
 
 
+def go_to_html():
+    scheduler_entries = get_entries_with_entity()
+    html = '<!DOCTYPE html>'
+
+    html += '<html>\n'
+    html += '<body>\n'
+
+    html += '<table>\n'
+    html += '<tr><th>Weekday</th><th>Time Slot</th><th>Teacher</th><th>Discipline</th>'
+    html += '<th>Study Year</th><th>Semi Year</th><th>Student Group</th><th>Scheduler ID</th></tr>\n'
+    for entry in scheduler_entries:
+        html += f'<tr><td>{entry.weekday}</td><td>{entry.time_slot}</td>'
+        html += f'<td>{entry.teacher_id}</td><td>{entry.discipline}</td><td>{entry.study_year_id}</td>'
+        html += f'<td>{entry.semi_year}</td><td>{entry.student_group}</td><td>{entry.scheduler_id}</td></tr>\n'
+    html += '</table>'
+
+    html += '</body>\n'
+    html += '</html>\n'
+
+    with open('my_html_file.html', 'w') as f:
+        f.write(html)
+
+    webbrowser.open('my_html_file.html')
+
+
 class TimetableView(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.generate_html = None
         self.semi_year_filter = None
         self.group_filter = None
         self.weekday_filter = None
@@ -36,18 +62,26 @@ class TimetableView(tk.Frame):
 
         self.timetable_entries = get_entries()
 
-        title_label = ttk.Label(self, text="Timetable View", font=("Helvetica", 20))
-        title_label.pack(pady= 20)
+        title_label = ttk.Label(self, text="Timetable View", font=("Helvetica", 12))
+        title_label.pack(pady=6)
 
         self.tree = ttk.Treeview(self, columns=(
             "ID", "Weekday", "Time Slot", "Teacher", "Discipline", "Study Year", "Semi Year", "Student "
                                                                                               "Group"),
                                  show="headings")
-        self.tree.pack(padx=10, pady=10, fill="both", expand=True)
+        self.tree.column('ID', width=50)
+        self.tree.column('Weekday', width=50)
+        self.tree.column('Time Slot', width=50)
+        self.tree.column('Teacher', width=50)
+        self.tree.column('Discipline', width=50)
+        self.tree.column('Study Year', width=50)
+        self.tree.column('Semi Year', width=50)
+        self.tree.column('Student Group', width=50)
+        self.tree.pack(fill="both", expand=True)
 
         for col in (
-            "ID", "Weekday", "Time Slot", "Teacher", "Discipline", "Study Year", "Semi Year", "Student "
-                                                                                              "Group"):
+                "ID", "Weekday", "Time Slot", "Teacher", "Discipline", "Study Year", "Semi Year", "Student "
+                                                                                                  "Group"):
             self.tree.heading(col, text=col, anchor="center")
 
         style = ttk.Style()
@@ -58,43 +92,46 @@ class TimetableView(tk.Frame):
             self.tree.insert("", "end", values=(
                 entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
-        self.add_button = ttk.Button(self, text="Add", command=self.add_timetable_entry(), style="Custom.TButton")
+        self.add_button = ttk.Button(self, text="Add", command=self.add_timetable_entry, style="Custom.TButton")
         self.add_button.pack(side="top", pady=10)
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="Custom.TButton")
         self.back_button.pack(side="right", padx=10, pady=10)
 
+        self.generate_html = ttk.Button(self, text="Generate HTML", command=go_to_html, style="TButton")
+        self.generate_html.pack(side="left", pady=6)
+
         self.tree.bind("<ButtonRelease-1>", self.on_tree_select)
 
-        style.configure("Custom.TButton", font=("Helvetica", 12), background="#d8d8d8", foreground="#333",
+        style.configure("Custom.TButton", font=("Helvetica", 8), background="#d8d8d8", foreground="#333",
                         borderwidth=0, focuscolor="#d8d8d8", lightcolor="#d8d8d8", darkcolor="#d8d8d8")
 
         weekday_filter_label = ttk.Label(self, text="Filter by Weekday:", font=("Helvetica", 14))
-        weekday_filter_label.pack(side="top")
+        weekday_filter_label.pack(side="left")
         weekday_ids = get_weekdays_values()
         weekday_ids.insert(0, "All")
         self.weekday_filter = ttk.Combobox(self, values=weekday_ids, state="readonly")
         self.weekday_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
         self.weekday_filter.current(0)
-        self.weekday_filter.pack(side="top", padx=5)
+        self.weekday_filter.pack(side="left", padx=5)
 
         time_slot_filter_label = ttk.Label(self, text="Filter by Time Slot:", font=("Helvetica", 14))
-        time_slot_filter_label.pack(side="top")
+        time_slot_filter_label.pack(side="left")
         time_slot_ids = get_time_slot_values()
         time_slot_ids.insert(0, "All")
         self.time_slot_filter = ttk.Combobox(self, values=time_slot_ids, state="readonly")
         self.time_slot_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
         self.time_slot_filter.current(0)
-        self.time_slot_filter.pack(side="top", padx=5)
+        self.time_slot_filter.pack(side="left", padx=5)
 
         teacher_filter_label = ttk.Label(self, text="Filter by Teacher:", font=("Helvetica", 14))
-        teacher_filter_label.pack(side="top")
+        teacher_filter_label.pack(side="left")
         teacher_ids = get_teacher_full_names()
         teacher_ids.insert(0, "All")
         self.teacher_filter = ttk.Combobox(self, values=teacher_ids, state="readonly")
         self.teacher_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
         self.teacher_filter.current(0)
-        self.teacher_filter.pack(side="top", padx=5)
+        self.teacher_filter.pack(side="left", padx=5)
 
         discipline_filter_label = ttk.Label(self, text="Filter by Discipline:", font=("Helvetica", 14))
         discipline_filter_label.pack(side="top")
@@ -177,10 +214,10 @@ class TimetableView(tk.Frame):
         self.tree.delete(*self.tree.get_children())
         for entry in filtered_entries:
             self.tree.insert("", "end", values=(
-                    entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
+                entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
     def add_timetable_entry(self):
         self.master.switch_frame(AddTimetableEntryForm)
 
     def go_back(self):
-        self.master.switch_frame(admin.AdminPage)
+        self.master.switch_frame(home.HomePage)

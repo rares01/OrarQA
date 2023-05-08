@@ -9,7 +9,6 @@ from ui.admin.views.students_view import StudentsView
 from ui.admin.views.teachers_view import TeachersView
 from ui.home.home_page import HomePage
 from ui.timetable.timetable_page import TimeTablePage
-from ui.timetable.create_timetable import CreateTimetable
 from ui.admin.views.timetable_view import TimetableView
 from ui.admin.forms.timetable.add_timetable_entry import AddTimetableEntryForm
 
@@ -19,14 +18,14 @@ class MainApplication(tk.Tk):
         super().__init__()
         self.frames = None
         self.title("Timetable Application")
-        self.geometry("1280x900")
+        self.geometry("1920x1080")
         self.create_frames()
 
     def create_frames(self):
         self.frames = {}
 
         for F in (HomePage, TimeTablePage, AddTimetableEntryForm, AdminPage, StudentsView, AddStudentForm, DisciplinesView, TimetableView,
-                  AddDisciplineForm, CreateTimetable, TeachersView, AddTeacherForm, ):
+                  AddDisciplineForm, TeachersView, AddTeacherForm, ):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")

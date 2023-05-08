@@ -32,6 +32,12 @@ class StudentsView(tk.Frame):
         self.tree = ttk.Treeview(self, columns=("ID", "First Name", "Last Name", "Study Year", "Semi Year", "Student "
                                                                                                             "Group"),
                                  show="headings")
+        self.tree.column('ID', width=50)
+        self.tree.column('First Name', width=50)
+        self.tree.column('Last Name', width=50)
+        self.tree.column('Study Year', width=50)
+        self.tree.column('Semi Year', width=50)
+        self.tree.column('Student Group', width=50)
         self.tree.pack(padx=10, pady=10, fill="both", expand=True)
 
         for col in ("ID", "First Name", "Last Name", "Study Year", "Semi Year", "Student Group"):

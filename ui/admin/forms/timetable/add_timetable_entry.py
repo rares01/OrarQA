@@ -10,6 +10,7 @@ from repositories.student_repo import add_student, get_students
 from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 from repositories.time_slot_repo import get_time_slot_values
+from repositories.weekdays_repo import get_weekdays_values
 
 
 def handle(weekday_entry=None, time_slot_entry=None, teacher_entry=None, discipline_entry=None,
@@ -25,13 +26,14 @@ def handle(weekday_entry=None, time_slot_entry=None, teacher_entry=None, discipl
     semi_year = semi_year_entry.get()
     student_group = student_group_entry.get()
     add_entry(weekday=weekday, start_hour=start_hour, end_hour=end_hour, teacher=teacher, discipline=discipline,
-              study_year=study_year, semi_year=semi_year, student_group=student_group)
+              study_year=study_year, semi_year=semi_year, student_group=student_group, scheduler_id=1)
 
 
 class AddTimetableEntryForm(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.back_button = None
+        self.timetable_view = None
         for child in master.winfo_children():
             if isinstance(child, view.TimetableView):
                 self.timetable_view = child
@@ -53,7 +55,7 @@ class AddTimetableEntryForm(tk.Frame):
         study_year_label = ttk.Label(self, text="Study Year:")
         semi_year_label = ttk.Label(self, text="Semi Year:")
         student_group_label = ttk.Label(self, text="Student Group:")
-        weekday_ids = get_time_slot_values()
+        weekday_ids = get_weekdays_values()
         weekday_var = tk.StringVar(self)
         weekday_var.set(weekday_ids[0])
         weekday_dropdown = ttk.Combobox(self, textvariable=weekday_var, values=weekday_ids, state='readonly')
@@ -106,5 +108,9 @@ class AddTimetableEntryForm(tk.Frame):
         self.back_button.pack()
 
     def go_back(self):
+        for child in self.master.winfo_children():
+            if isinstance(child, view.TimetableView):
+                self.timetable_view = child
+                break
         self.timetable_view.set_timetable_entries(get_entries())
         self.master.switch_frame(view.TimetableView)
