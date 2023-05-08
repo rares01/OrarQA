@@ -81,3 +81,48 @@ def get_discipline_by_id(id):
 
     return [row[1] for row in rows][0]
 
+
+def get_discipline_value():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM discipline")
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    disciplines = [row[1] for row in rows]
+
+    return disciplines
+
+
+def get_teacher_by_discipline(name):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT teacher_id FROM discipline WHERE name=%s", (name,))
+    rows = cur.fetchall()
+
+    teachers_by_discipline = []
+    for row in rows:
+        teacher = get_teacher_full_name_by_id(row[0])
+        teachers_by_discipline.append(teacher)
+
+    cur.close()
+    conn.close()
+
+    return teachers_by_discipline
+
+
+def get_study_year_by_discipline(name):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT study_year_id FROM discipline WHERE name=%s", (name,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [row[0] for row in rows]

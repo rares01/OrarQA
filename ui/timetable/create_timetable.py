@@ -3,10 +3,16 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.timetable.timetable_page as timetable
+from repositories.discipline_repo import get_discipline_value, get_teacher_by_discipline, get_study_year_by_discipline
 from repositories.room_repo import get_room_values
 from repositories.room_type_repo import get_room_type_values
+from repositories.semi_year_repo import get_semi_years_values
+from repositories.student_group_repo import get_student_groups_values
+from repositories.study_year_repo import get_study_years_values
+from repositories.teacher_repo import get_teacher_full_names
 from repositories.time_slot_repo import get_time_slot_values
-from repositories.weekdays_repo import get_weekdays_values
+from repositories.weekdays_repo import get_weekdays_values, get_id_by_value
+from repositories.scheduler_entry_repo import add_scheduler_entry
 
 
 class CreateTimetable(tk.Frame):
@@ -33,20 +39,24 @@ class CreateTimetable(tk.Frame):
 
     def display(self):
         self.style = ttk.Style()
-        self.style.configure("Treeview", font=("Helvetica", 14), padding=10)
+        self.style.configure("Treeview", font=("Helvetica", 6), padding=6)
         self.style.configure("TFrame", padding=10)
         self.style.configure("TButton", font=("Helvetica", 12), padding=10)
 
         self.frame = ttk.Frame(self)
         self.frame.pack(side="left", fill="y", padx=10, pady=10)
 
-        self.treeview = ttk.Treeview(self.frame, columns=("TimeSlot", "Discipline", "Type", "Professor", "Room"),
+        self.treeview = ttk.Treeview(self.frame, columns=("TimeSlot", "Discipline", "Type", "Professor", "Room", "Year",
+                                                          "Semi Year", "Group"),
                                      show="headings")
         self.treeview.heading("TimeSlot", text="TimeSlot", anchor="center")
         self.treeview.heading("Discipline", text="Discipline", anchor="center")
         self.treeview.heading("Type", text="Type", anchor="center")
         self.treeview.heading("Professor", text="Professor", anchor="center")
         self.treeview.heading("Room", text="Room", anchor="center")
+        self.treeview.heading("Year", text="Year", anchor="center")
+        self.treeview.heading("Semi Year", text="Semi Year", anchor="center")
+        self.treeview.heading("Group", text="Group", anchor="center")
 
         for i, day in enumerate(self.weekdays):
             self.treeview.insert("", i, values=[day, "", "", "", ""])
@@ -54,7 +64,8 @@ class CreateTimetable(tk.Frame):
         self.treeview.pack(side="left", fill="y")
 
         for i, day in enumerate(self.weekdays):
-            button = ttk.Button(self.frame, text="Add Entry", command=lambda day=day: self.display_form(day), style="TButton")
+            button = ttk.Button(self.frame, text="Add Entry", command=lambda day=day: self.display_form(day),
+                                style="TButton")
             button.pack(side="top", pady=5)
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_timetables, style="TButton")
@@ -76,7 +87,7 @@ class CreateTimetable(tk.Frame):
         label2 = tk.Label(window, text="Discipline:")
         label2.pack(pady=5, anchor="w")
 
-        self.discipline_options = ["Math", "PE", "Sports", "Literature"]
+        self.discipline_options = get_discipline_value()
         discipline_var = tk.StringVar()
         discipline_dropdown = ttk.OptionMenu(window, discipline_var, *self.discipline_options)
         discipline_dropdown.pack(pady=5)
@@ -92,7 +103,7 @@ class CreateTimetable(tk.Frame):
         label4 = tk.Label(window, text="Professor:")
         label4.pack(pady=5, anchor="w")
 
-        self.teacher_options = ["Marcus", "Tiberius", "Augustus"]
+        self.teacher_options = get_teacher_full_names()
         teacher_var = tk.StringVar()
         teacher_dropdown = ttk.OptionMenu(window, teacher_var, *self.teacher_options)
         teacher_dropdown.pack(pady=5)
@@ -108,7 +119,7 @@ class CreateTimetable(tk.Frame):
         label6 = tk.Label(window, text="Year:")
         label6.pack(pady=5, anchor="w")
 
-        self.year_options = ["Marcus", "Tiberius", "Augustus"]
+        self.year_options = get_study_years_values()
         year_var = tk.StringVar()
         year_dropdown = ttk.OptionMenu(window, year_var, *self.year_options)
         year_dropdown.pack(pady=5)
@@ -116,7 +127,7 @@ class CreateTimetable(tk.Frame):
         label7 = tk.Label(window, text="Semi Year:")
         label7.pack(pady=5, anchor="w")
 
-        self.semi_year_options = ["Seria 1A", "Seria 1B", "Seria 1C"]
+        self.semi_year_options = get_semi_years_values()
         semi_year_var = tk.StringVar()
         semi_year_var.set(self.semi_year_options[0])
         semi_year_dropdown = ttk.OptionMenu(window, semi_year_var, *self.semi_year_options)
@@ -125,7 +136,7 @@ class CreateTimetable(tk.Frame):
         label7 = tk.Label(window, text="Group:")
         label7.pack(pady=5, anchor="w")
 
-        self.group_options = ["None", "Grupa 1", "Grupa 2", "Grupa 3"]
+        self.group_options = get_student_groups_values()
         group_var = tk.StringVar()
         group_var.set(self.group_options[0])
         group_dropdown = ttk.OptionMenu(window, group_var, *self.group_options)
@@ -137,14 +148,20 @@ class CreateTimetable(tk.Frame):
             form_type = type_var.get()
             teacher = teacher_var.get()
             room = room_var.get()
-            add_entry(day, time_slot, discipline, teacher, form_type, room)
+            year = year_var.get()
+            semi_year = semi_year_var.get()
+            group = group_var.get()
+            add_entry(day, time_slot, discipline, teacher, form_type, room, year, semi_year, group)
             window.destroy()
 
         button = tk.Button(window, text="Add Entry", command=submit_form)
         button.pack(pady=10)
 
-        def add_entry(day, time_slot, discipline, teacher, form_type, room):
-            self.treeview.insert("", "end", values=(time_slot, discipline, teacher, form_type, room))
+        def add_entry(day, time_slot, discipline, teacher, form_type, room, year, semi_year, group):
+            self.treeview.insert("", "end", values=(time_slot, discipline, teacher, form_type, room, year, semi_year,
+                                                    group))
+
+
             update_label(day)
 
         def update_label(day):
@@ -153,8 +170,9 @@ class CreateTimetable(tk.Frame):
             self.treeview.item(index, values=[day, "", "", "", ""])
 
             for i, entry in enumerate(day_entries):
-                time_slot, discipline, teacher, form_type, room = entry
-                self.treeview.item(index, values=[time_slot, discipline, teacher, form_type, room])
+                time_slot, discipline, teacher, form_type, room, year, semi_year, group = entry
+                self.treeview.item(index, values=[time_slot, discipline, teacher, form_type, room, year, semi_year,
+                                                    group])
 
             self.treeview.config(font=("Helvetica", 12))
 

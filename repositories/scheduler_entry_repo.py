@@ -1,16 +1,16 @@
 from dbcontext import connection
-from weekdays_repo import get_id_by_value as get_weekday_id
-from weekdays_repo import get_name_by_id as get_weekday_name
-from time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
-from teacher_repo import get_teacher_id_by_full_name as get_teacher_id, get_teacher_full_name_by_id \
+from repositories.weekdays_repo import get_id_by_value as get_weekday_id
+from repositories.weekdays_repo import get_name_by_id as get_weekday_name
+from repositories.time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
+from repositories.teacher_repo import get_teacher_id_by_full_name as get_teacher_id, get_teacher_full_name_by_id \
     as get_teacher_full_name
-from discipline_repo import get_discipline_id_by_value as get_discipline_id, get_discipline_by_id as get_discipline_name
-from study_year_repo import get_id_by_value as get_study_year_id, get_value_by_id as get_study_year_number
-from semi_year_repo import get_id_by_value as get_semi_year_id, get_value_by_id as get_semi_year_name
-from student_group_repo import get_id_by_value as get_student_group_id, get_value_by_id as get_student_group_name
+from repositories.discipline_repo import get_discipline_id_by_value as get_discipline_id, get_discipline_by_id as get_discipline_name
+from repositories.study_year_repo import get_id_by_value as get_study_year_id, get_value_by_id as get_study_year_number
+from repositories.semi_year_repo import get_id_by_value as get_semi_year_id, get_value_by_id as get_semi_year_name
+from repositories.student_group_repo import get_id_by_value as get_student_group_id, get_value_by_id as get_student_group_name
 
 
-def add_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, semi_year, student_group, scheduler_id):
+def add_scheduler_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, semi_year, student_group, scheduler_id):
     conn = connection()
     cur = conn.cursor()
 
