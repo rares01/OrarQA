@@ -1,10 +1,13 @@
 import random
 import tkinter as tk
+import webbrowser
 from tkinter import ttk
 
 import ui.timetable.timetable_page as timetable
+from entities.scheduler_entry import SchedulerEntry
 from repositories.room_repo import get_room_values
 from repositories.room_type_repo import get_room_type_values
+from repositories.scheduler_entry_repo import get_entries
 from repositories.time_slot_repo import get_time_slot_values
 from repositories.weekdays_repo import get_weekdays_values
 
@@ -61,8 +64,8 @@ class CreateTimetable(tk.Frame):
         self.back_button.pack(side="bottom")
 
 
-        self.back_button = ttk.Button(self, text="Generate HTML", command=self.go_to_timetables, style="TButton")
-        self.back_button.pack(side="")
+        self.back_button = ttk.Button(self, text="Generate HTML", command=self.go_to_html, style="TButton")
+        self.back_button.pack(side="bottom", pady=8)
 
 
 
@@ -169,21 +172,35 @@ class CreateTimetable(tk.Frame):
 
 
     def go_to_html(self):
+
+        # scheduler_entries = [
+        #     SchedulerEntry(1, 'Monday', '09:00 - 11:00', 'John Doe', 'Mathematics', 2, 'Second', 1, 1),
+        #     SchedulerEntry(2, 'Tuesday', '11:00 - 13:00', 'Jane Smith', 'English', 3, 'First', 2, 1),
+        #     SchedulerEntry(3, 'Wednesday', '13:00 - 15:00', 'Bob Johnson', 'Physics', 2, 'Second', 1, 1),
+        # ]
+
+        scheduler_entries = get_entries()
         html = '<!DOCTYPE html>'
 
         html += '<html>\n'
         html += '<body>\n'
 
         html += '<table>\n'
-        html += '<tr><th>ID</th><th>Weekday</th><th>Time Slot</th><th>Teacher</th><th>Discipline</th>'
+        html += '<tr><th>Weekday</th><th>Time Slot</th><th>Teacher</th><th>Discipline</th>'
         html += '<th>Study Year</th><th>Semi Year</th><th>Student Group</th><th>Scheduler ID</th></tr>\n'
         for entry in scheduler_entries:
-            html += f'<tr><td>{entry.id}</td><td>{entry.weekday}</td><td>{entry.time_slot}</td>'
+            html += f'<tr><td>{entry.weekday}</td><td>{entry.time_slot}</td>'
             html += f'<td>{entry.teacher_id}</td><td>{entry.discipline}</td><td>{entry.study_year_id}</td>'
             html += f'<td>{entry.semi_year}</td><td>{entry.student_group}</td><td>{entry.scheduler_id}</td></tr>\n'
         html += '</table>'
 
         html += '</body>\n'
         html += '</html>\n'
+
+        with open('my_html_file.html', 'w') as f:
+            f.write(html)
+
+        # Open the HTML file in the default web browser
+        webbrowser.open('my_html_file.html')
 
 
