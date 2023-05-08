@@ -12,7 +12,6 @@ class DisciplinesView(tk.Frame):
         self.back_button = None
         self.tree = None
         self.add_button = None
-        self.edit_button = None
         self.delete_button = None
         self.master = master
         self.display()
@@ -56,10 +55,8 @@ class DisciplinesView(tk.Frame):
     def on_tree_select(self, event):
         selection = self.tree.selection()
         if selection:
-            self.edit_button.config(state="enabled")
             self.delete_button.config(state="enabled")
         else:
-            self.edit_button.config(state="disabled")
             self.delete_button.config(state="disabled")
 
     def add_discipline(self):

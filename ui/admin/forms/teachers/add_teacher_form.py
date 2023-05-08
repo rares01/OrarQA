@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ui.admin.views.disciplines_view as view
+import ui.admin.views.teachers_view as view
 from repositories.teacher_repo import add_teacher
 
 
@@ -35,7 +35,7 @@ class AddTeacherForm(tk.Frame):
         last_name_entry.pack()
 
         add_teacher_button = ttk.Button(self, text="Add",
-                                           command=lambda: self.handle(first_name_entry, last_name_entry))
+                                        command=lambda: self.handle(first_name_entry, last_name_entry))
         add_teacher_button.pack()
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="TButton")

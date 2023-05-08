@@ -3,6 +3,7 @@ import tkinter as tk
 import ui.admin.admin_page as admin
 import ui.timetable.select_year as select_year
 
+
 class HomePage(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)

@@ -21,9 +21,9 @@ def get_students():
     students = []
     for row in rows:
         student = Student(*row)
-        student.study_year = get_value_semi_year(row[3])
-        student.semi_year = get_value_student_group(row[4])
-        student.student_group = get_value_study_year(row[5])
+        student.study_year = get_value_study_year(row[3])
+        student.semi_year = get_value_semi_year(row[4])
+        student.student_group = get_value_student_group(row[5])
         students.append(student)
 
     return students

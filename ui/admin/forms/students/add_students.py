@@ -4,7 +4,7 @@ from tkinter import ttk
 import ui.admin.views.students_views as view
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
-from repositories.student_repo import add_student
+from repositories.student_repo import add_student, get_students
 from repositories.study_year_repo import get_study_years_values
 
 
@@ -23,6 +23,10 @@ class AddStudentForm(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.back_button = None
+        for child in master.winfo_children():
+            if isinstance(child, view.StudentsView):
+                self.students_view = child
+                break
         self.display()
 
     def display(self):
@@ -72,4 +76,5 @@ class AddStudentForm(tk.Frame):
         self.back_button.pack()
 
     def go_back(self):
+        self.students_view.set_students(get_students())
         self.master.switch_frame(view.StudentsView)

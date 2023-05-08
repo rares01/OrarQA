@@ -12,7 +12,6 @@ class TeachersView(tk.Frame):
         self.back_button = None
         self.tree = None
         self.add_button = None
-        self.edit_button = None
         self.delete_button = None
         self.master = master
         self.display()
@@ -36,7 +35,7 @@ class TeachersView(tk.Frame):
 
         for teacher in teachers:
             self.tree.insert("", "end", values=(
-            teacher.id, teacher.first_name, teacher.last_name))
+                teacher.id, teacher.first_name, teacher.last_name))
 
         self.add_button = ttk.Button(self, text="Add", command=self.add_discipline, style="Custom.TButton")
         self.add_button.pack(side="top", pady=10)
@@ -56,10 +55,8 @@ class TeachersView(tk.Frame):
     def on_tree_select(self, event):
         selection = self.tree.selection()
         if selection:
-            self.edit_button.config(state="enabled")
             self.delete_button.config(state="enabled")
         else:
-            self.edit_button.config(state="disabled")
             self.delete_button.config(state="disabled")
 
     def add_discipline(self):
@@ -67,7 +64,6 @@ class TeachersView(tk.Frame):
 
     def go_back(self):
         self.master.switch_frame(admin.AdminPage)
-
 
     def delete_discipline(self):
         selection = self.tree.selection()
