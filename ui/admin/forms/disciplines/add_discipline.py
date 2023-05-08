@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.views.disciplines_view as view
-from repositories.discipline_repo import add_discipline
+from repositories.discipline_repo import add_discipline, get_disciplines
 from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 
@@ -11,6 +11,10 @@ class AddDisciplineForm(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.back_button = None
+        for child in master.winfo_children():
+            if isinstance(child, view.DisciplinesView):
+                self.disciplines_view = child
+                break
         self.display()
 
     def handle(self, name_entry=None, year_entry=None, teacher_entry=None):
@@ -55,4 +59,5 @@ class AddDisciplineForm(tk.Frame):
         self.back_button.pack()
 
     def go_back(self):
+        self.disciplines_view.set_disciplines(get_disciplines())
         self.master.switch_frame(view.DisciplinesView)

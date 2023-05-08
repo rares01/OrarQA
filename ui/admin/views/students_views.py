@@ -124,13 +124,6 @@ class StudentsView(tk.Frame):
                 student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
                 student.student_group))
 
-    def update_students(self, students):
-        self.tree.delete(*self.tree.get_children())
-        for student in students:
-            self.tree.insert("", "end", values=(
-                student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
-                student.student_group))
-
     def add_student(self):
         self.master.switch_frame(AddStudentForm)
 
