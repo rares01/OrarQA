@@ -24,7 +24,7 @@ class MainApplication(tk.Tk):
         self.frames = {}
 
         for F in (HomePage, TimeTablePage, AdminPage, StudentsView, AddStudentForm, DisciplinesView, AddDisciplineForm,
-                CreateTimetable, TeachersView, AddTeacherForm):
+                  CreateTimetable, TeachersView, AddTeacherForm):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
