@@ -49,15 +49,7 @@ def get_entry_by_id(entry_id):
     return [row[0] for row in rows][0]
 
 
-def get_entries_by_weekday(weekday, scheduler_id):
-    conn = connection()
-    cur = conn.cursor()
-
-    weekday_id = get_weekday_id(weekday)
-
-    cur.execute("SELECT * FROM schedulerentry WHERE weekday_id=%s AND scheduler_id=%s", (weekday_id, scheduler_id))
-
-    rows = cur.fetchall()
+def fetch_rows(rows):
     entries = []
     for row in rows:
         weekday = get_weekday_name(row[1])
@@ -69,14 +61,18 @@ def get_entries_by_weekday(weekday, scheduler_id):
         student_group = get_student_group_name(row[7])
         entries.append((weekday, time_slot, teacher, discipline, study_year, semi_year, student_group))
 
-    cur.close()
-    conn.close()
-
     return entries
 
 
-# to do get_entries_by_weekday_and_year
-# to do get_entries_by_weekday_and_year_and_semi_year
-# to do get_entries_by_weekday_and_year_and_semi_year_and_student_group
+def get_entries(scheduler_id):
+    conn = connection()
+    cur = conn.cursor()
 
-print(get_entries_by_weekday("Monday", 1))
+    cur.execute("SELECT * FROM schedulerentry WHERE weekday_id=%s AND scheduler_id=%s", (scheduler_id,))
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return fetch_rows(rows)
