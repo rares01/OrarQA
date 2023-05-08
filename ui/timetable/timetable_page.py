@@ -1,7 +1,6 @@
 import tkinter as tk
 
 import ui.home.home_page as home_page
-import ui.timetable.create_timetable as create_timetable
 import ui.admin.views.timetable_view as timetable_view
 
 
@@ -22,11 +21,8 @@ class TimeTablePage(tk.Frame):
         self.create_timetable_button = tk.Button(self, text="CREATE TIMETABLE", command=self.go_to_create)
         self.create_timetable_button.grid(row=1, column=0)
 
-        self.see_timetable_button = tk.Button(self, text="SEE TIMETABLE")
-        self.see_timetable_button.grid(row=2, column=0)
-
         self.back_button = tk.Button(self, text="BACK", command=self.go_back)
-        self.back_button.grid(row=3, column=0)
+        self.back_button.grid(row=2, column=0)
 
     def go_back(self):
         self.master.switch_frame(home_page.HomePage)

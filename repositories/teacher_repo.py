@@ -64,6 +64,7 @@ def get_teachers():
 
     return teachers
 
+
 def get_full_teachers():
     conn = connection()
     cur = conn.cursor()
