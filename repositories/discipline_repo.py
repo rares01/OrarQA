@@ -54,3 +54,30 @@ def delete_discipline(id):
 
     cur.close()
     conn.close()
+
+
+def get_discipline_id_by_value(name):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT id FROM discipline WHERE name=%s", (name,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [row[0] for row in rows][0]
+
+
+def get_discipline_by_id(id):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM discipline WHERE id=%s", (id,))
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [row[1] for row in rows][0]
+

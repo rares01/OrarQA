@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+import random
 
 import ui.timetable.timetable_page as timetable
 from repositories.room_repo import get_room_values
 from repositories.room_type_repo import get_room_type_values
 from repositories.time_slot_repo import get_time_slot_values
+from repositories.weekdays_repo import get_weekdays_values
 
 
 class CreateTimetable(tk.Frame):
@@ -33,10 +35,11 @@ class CreateTimetable(tk.Frame):
         self.label_timeslot = None
         self.frame = None
         self.master = master
-        self.weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        self.weekdays = get_weekdays_values()
         self.entries = [[] for i in range(len(self.weekdays))]
         self.title_label = None
         self.style = None
+        self.scheduler = random.randint(0, 100)
         self.display()
 
     def display(self):
@@ -87,7 +90,6 @@ class CreateTimetable(tk.Frame):
         label1.pack(pady=5, anchor="w")
 
         self.time_options = get_time_slot_values()
-        self.time_options = ["8:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"]
         time_var = tk.StringVar()
         time_var.set(self.time_options[0])
         time_dropdown = ttk.OptionMenu(window, time_var, *self.time_options)
@@ -105,7 +107,6 @@ class CreateTimetable(tk.Frame):
         label3.pack(pady=5, anchor="w")
 
         self.type_options = get_room_type_values()
-        self.type_options = ["course", "laboratory", "seminary"]
         type_var = tk.StringVar()
         type_var.set(self.type_options[0])
         type_dropdown = ttk.OptionMenu(window, type_var, *self.type_options)
@@ -124,7 +125,6 @@ class CreateTimetable(tk.Frame):
         label5.pack(pady=5, anchor="w")
 
         self.room_options = get_room_values()
-        self.room_options = ["C11", "S11", "C3"]
         room_var = tk.StringVar()
         room_var.set(self.room_options[0])
         room_dropdown = ttk.OptionMenu(window, room_var, *self.room_options)
