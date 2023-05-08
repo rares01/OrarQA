@@ -10,6 +10,12 @@ from repositories.time_slot_repo import get_time_slot_values
 class CreateTimetable(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.group_filter = None
+        self.semi_year_filter = None
+        self.study_year_filter = None
+        self.group_options = None
+        self.semi_year_options = None
+        self.year_options = None
         self.label_room = None
         self.label_professor = None
         self.label_type = None
@@ -75,6 +81,35 @@ class CreateTimetable(tk.Frame):
                 entry_label.grid(row=i + 1, column=j * 4 + 8, padx=10, pady=10, sticky="w", columnspan=4)
                 self.entry_labels.append(entry_label)
 
+        year_filter_label = ttk.Label(self, text="Filter by Year:", font=("Helvetica", 14))
+        year_filter_label.pack(side="left")
+        # AICI SE VA LEGA BACKEND
+        study_year_ids = ["Anul 1", "Anul 2", "Anul 3"]
+        study_year_ids.insert(0, "All")
+        self.study_year_filter = ttk.Combobox(self, values=study_year_ids, state="readonly")
+        # PENTRU APELARE BACKEND A SE DECOMENTA CAND APELATI BACKEND
+        # self.study_year_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
+        self.study_year_filter.current(0)
+        self.study_year_filter.pack(side="left", padx=5)
+
+        semi_year_filter_label = ttk.Label(self, text="Filter by Semi Year:", font=("Helvetica", 14))
+        semi_year_filter_label.pack(side="left")
+        semi_year_ids = ["Seria 1A", "Seria 1B", "Seria 1C"]
+        semi_year_ids.insert(0, "All")
+        self.semi_year_filter = ttk.Combobox(self, values=semi_year_ids, state="readonly")
+        # self.semi_year_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
+        self.semi_year_filter.current(0)
+        self.semi_year_filter.pack(side="left", padx=5)
+
+        group_filter_label = ttk.Label(self, text="Filter by Group:", font=("Helvetica", 14))
+        group_filter_label.pack(side="left")
+        group_ids = ["None", "Grupa 1", "Grupa 2", "Grupa 3"]
+        group_ids.insert(0, "All")
+        self.group_filter = ttk.Combobox(self, values=group_ids, state="readonly")
+        # self.group_filter.bind("<<ComboboxSelected>>", lambda event: self.apply_filters())
+        self.group_filter.current(0)
+        self.group_filter.pack(side="left", padx=5)
+
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_timetables, style="TButton")
         self.back_button.pack(side="bottom")
 
@@ -139,6 +174,33 @@ class CreateTimetable(tk.Frame):
         room_dropdown = ttk.OptionMenu(window, room_var, *self.room_options)
         room_dropdown.pack(pady=5)
 
+        label6 = tk.Label(window, text="Year:")
+        label6.pack(pady=5, anchor="w")
+
+        self.year_options = ["Anul 1", "Anul 2", "Anul 3"]
+        year_var = tk.StringVar()
+        year_var.set(self.year_options[0])
+        year_dropdown = ttk.OptionMenu(window, year_var, *self.year_options)
+        year_dropdown.pack(pady=5)
+
+        label7 = tk.Label(window, text="Semi Year:")
+        label7.pack(pady=5, anchor="w")
+
+        self.semi_year_options = ["Seria 1A", "Seria 1B", "Seria 1C"]
+        semi_year_var = tk.StringVar()
+        semi_year_var.set(self.semi_year_options[0])
+        semi_year_dropdown = ttk.OptionMenu(window, semi_year_var, *self.semi_year_options)
+        semi_year_dropdown.pack(pady=5)
+
+        label7 = tk.Label(window, text="Group:")
+        label7.pack(pady=5, anchor="w")
+
+        self.group_options = ["None", "Grupa 1", "Grupa 2", "Grupa 3"]
+        group_var = tk.StringVar()
+        group_var.set(self.group_options[0])
+        group_dropdown = ttk.OptionMenu(window, group_var, *self.group_options)
+        group_dropdown.pack(pady=5)
+
         # Create a function to handle form submission
         def submit_form():
             time_slot = time_var.get()
@@ -189,3 +251,38 @@ class CreateTimetable(tk.Frame):
 
     def go_to_timetables(self):
         self.master.switch_frame(timetable.TimeTablePage)
+
+
+    # A SE MODIFICA CU LEGATURA CU BACKEND PT ORAR
+    def apply_filters(self):
+        year = self.study_year_filter.get()
+        semi_year = self.semi_year_filter.get()
+        group = self.group_filter.get()
+
+        filtered_students = []
+
+        for student in self.students:
+            if year != "All" and student.study_year != int(year):
+                continue
+            if group != "All" and student.student_group != int(group):
+                continue
+            if semi_year != "All" and student.semi_year != semi_year:
+                continue
+
+            filtered_students.append(student)
+
+        self.update_treeview(filtered_students)
+
+    def update_treeview(self, filtered_students):
+        self.tree.delete(*self.tree.get_children())
+        for student in filtered_students:
+            self.tree.insert("", "end", values=(
+                student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
+                student.student_group))
+
+    def update_students(self, students):
+        self.tree.delete(*self.tree.get_children())
+        for student in students:
+            self.tree.insert("", "end", values=(
+                student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
+                student.student_group))

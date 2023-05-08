@@ -2,6 +2,7 @@ import tkinter as tk
 
 import ui.admin.admin_page as admin
 import ui.timetable.select_year as select_year
+import ui.timetable.timetable_page as timetable_page
 
 
 class HomePage(tk.Frame):
@@ -27,4 +28,4 @@ class HomePage(tk.Frame):
         self.master.switch_frame(admin.AdminPage)
 
     def go_to_timetable(self):
-        self.master.switch_frame(select_year.SelectYear)
+        self.master.switch_frame(timetable_page.TimeTablePage)
