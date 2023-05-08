@@ -17,15 +17,14 @@ class HomePage(tk.Frame):
 
     def create_widgets(self):
         self.title_label = ttk.Label(self, text="Home Page", font=("Helvetica", 20))
-        self.title_label.grid(row=0, column=0)
+        self.title_label.pack(side="top", pady=10)
 
         self.admin_button = ttk.Button(self, text="Admin", command=self.go_to_admin_page, style="Custom.TButton")
-        # self.admin_button = tk.Button(self, text="ADMIN", command=self.go_to_admin_page)
-        self.admin_button.grid(row=1, column=0)
+        self.admin_button.pack(side="top", pady=10)
 
         self.timetable_button = ttk.Button(self, text="Timetable" , command=self.go_to_timetable, style="Custom.TButton")
-        # self.timetable_button = tk.Button(self, text="TIMETABLE", command=self.go_to_timetable)
-        self.timetable_button.grid(row=2, column=0)
+        self.timetable_button.pack(side="top", pady=10)
+
 
     def go_to_admin_page(self):
         self.master.switch_frame(admin.AdminPage)
