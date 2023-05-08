@@ -47,3 +47,17 @@ def add_student(first_name, last_name, study_year, semi_year, student_group):
 
     cur.close()
     conn.close()
+
+
+def delete_student(id):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM student WHERE id=%s", (id,))
+    conn.commit()
+
+    print("Student removed!")
+
+    cur.close()
+    conn.close()

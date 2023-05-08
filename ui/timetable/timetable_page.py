@@ -2,7 +2,6 @@ import tkinter as tk
 
 import ui.home.home_page as home_page
 import ui.timetable.create_timetable as create_timetable
-import ui.timetable.select_year as select_year
 
 
 class TimeTablePage(tk.Frame):

@@ -40,3 +40,17 @@ def add_discipline(name, year, teacher):
 
     cur.close()
     conn.close()
+
+
+def delete_discipline(id):
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM discipline WHERE id=%s", (id,))
+    conn.commit()
+
+    print("Discipline removed!")
+
+    cur.close()
+    conn.close()

@@ -10,7 +10,6 @@ from ui.admin.views.teachers_view import TeachersView
 from ui.home.home_page import HomePage
 from ui.timetable.timetable_page import TimeTablePage
 from ui.timetable.create_timetable import CreateTimetable
-from ui.timetable.select_year import SelectYear
 
 
 class MainApplication(tk.Tk):

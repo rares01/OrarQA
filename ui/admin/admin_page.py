@@ -49,6 +49,5 @@ class AdminPage(tk.Frame):
         elif entity_name == "Teachers":
             self.master.switch_frame(TeachersView)
 
-        
     def go_to_home(self):
         self.master.switch_frame(home.HomePage)

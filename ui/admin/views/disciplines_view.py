@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.admin_page as admin
-from repositories.discipline_repo import get_disciplines
+from repositories.discipline_repo import get_disciplines, delete_discipline
 from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
@@ -117,4 +117,5 @@ class DisciplinesView(tk.Frame):
         selection = self.tree.selection()
         if selection:
             values = self.tree.item(selection)["values"]
-            print(f"Delete discipline {values[0]} {values[1]}")
+            delete_discipline(values[0])
+        self.update_treeview(get_disciplines())

@@ -4,7 +4,7 @@ from tkinter import ttk
 import ui.admin.admin_page as admin
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
-from repositories.student_repo import get_students
+from repositories.student_repo import get_students, delete_student
 from repositories.study_year_repo import get_study_years_values
 from ui.admin.forms.students.add_students import AddStudentForm
 
@@ -134,4 +134,5 @@ class StudentsView(tk.Frame):
         selection = self.tree.selection()
         if selection:
             values = self.tree.item(selection)["values"]
-            print(f"Delete student {values[1]} {values[2]}")
+            delete_student(values[0])
+        self.update_treeview(get_students())
