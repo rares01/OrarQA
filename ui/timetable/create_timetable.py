@@ -60,6 +60,12 @@ class CreateTimetable(tk.Frame):
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_timetables, style="TButton")
         self.back_button.pack(side="bottom")
 
+
+        self.back_button = ttk.Button(self, text="Generate HTML", command=self.go_to_timetables, style="TButton")
+        self.back_button.pack(side="")
+
+
+
     def display_form(self, day):
         window = tk.Toplevel()
         window.title(f"Add Entry for {day}")
@@ -160,3 +166,24 @@ class CreateTimetable(tk.Frame):
 
     def go_to_timetables(self):
         self.master.switch_frame(timetable.TimeTablePage)
+
+
+    def go_to_html(self):
+        html = '<!DOCTYPE html>'
+
+        html += '<html>\n'
+        html += '<body>\n'
+
+        html += '<table>\n'
+        html += '<tr><th>ID</th><th>Weekday</th><th>Time Slot</th><th>Teacher</th><th>Discipline</th>'
+        html += '<th>Study Year</th><th>Semi Year</th><th>Student Group</th><th>Scheduler ID</th></tr>\n'
+        for entry in scheduler_entries:
+            html += f'<tr><td>{entry.id}</td><td>{entry.weekday}</td><td>{entry.time_slot}</td>'
+            html += f'<td>{entry.teacher_id}</td><td>{entry.discipline}</td><td>{entry.study_year_id}</td>'
+            html += f'<td>{entry.semi_year}</td><td>{entry.student_group}</td><td>{entry.scheduler_id}</td></tr>\n'
+        html += '</table>'
+
+        html += '</body>\n'
+        html += '</html>\n'
+
+
