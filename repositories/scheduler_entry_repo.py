@@ -1,4 +1,5 @@
 from dbcontext import connection
+from entities.scheduler_entry import SchedulerEntry
 from repositories.weekdays_repo import get_id_by_value as get_weekday_id
 from repositories.weekdays_repo import get_name_by_id as get_weekday_name
 from repositories.time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
@@ -80,3 +81,31 @@ def get_entries():
 
 
 print(get_entries())
+def fetch_rows_with_entity(rows):
+    entries = []
+    for row in rows:
+        id = row[0]
+        weekday = get_weekday_name(row[1])
+        time_slot = get_time_slot(row[2])
+        teacher = get_teacher_full_name(row[3])
+        discipline = get_discipline_name(row[4])
+        study_year = get_study_year_number(row[5])
+        semi_year = get_semi_year_name(row[6])
+        student_group = get_student_group_name(row[7])
+        scheduler_entry = SchedulerEntry(id, weekday, time_slot, teacher, discipline, study_year, semi_year,
+                                         student_group, 1)
+        entries.append(scheduler_entry)
+
+    return entries
+def get_entries_with_entity():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM schedulerentry")
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return fetch_rows_with_entity(rows)
