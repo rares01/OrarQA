@@ -24,6 +24,22 @@ def get_disciplines():
     return disciplines
 
 
+def get_disciplines_value():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM discipline")
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    disciplines = [row[1] for row in rows]
+
+    return disciplines
+
+
+
 def add_discipline(name, year, teacher):
     conn = connection()
     cur = conn.cursor()
@@ -80,4 +96,3 @@ def get_discipline_by_id(id):
     conn.close()
 
     return [row[1] for row in rows][0]
-

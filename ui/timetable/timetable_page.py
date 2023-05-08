@@ -2,6 +2,7 @@ import tkinter as tk
 
 import ui.home.home_page as home_page
 import ui.timetable.create_timetable as create_timetable
+import ui.admin.views.timetable_view as timetable_view
 
 
 class TimeTablePage(tk.Frame):
@@ -31,4 +32,4 @@ class TimeTablePage(tk.Frame):
         self.master.switch_frame(home_page.HomePage)
 
     def go_to_create(self):
-        self.master.switch_frame(create_timetable.CreateTimetable)
+        self.master.switch_frame(timetable_view.TimetableView)
