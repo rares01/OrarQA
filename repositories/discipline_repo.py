@@ -39,7 +39,6 @@ def get_disciplines_value():
     return disciplines
 
 
-
 def add_discipline(name, year, teacher):
     conn = connection()
     cur = conn.cursor()
