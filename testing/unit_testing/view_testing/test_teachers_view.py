@@ -53,7 +53,11 @@ class TestTeachersView(unittest.TestCase):
         # Check the initial state of UI elements
         self.assertEqual(str(self.view.delete_button["state"]), "disabled")
 
+    def test_apply_filters(self):
 
+        # todo: Andrei Mosor,
+        # once the similar methods in the test_discipline_view and test_students_view are updated,
+        # add them here in a similar manner
 
     def test_on_tree_select(self):
         # Test the on_tree_select method when an item is selected in the treeview
