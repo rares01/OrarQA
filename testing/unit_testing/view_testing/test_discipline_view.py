@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 import tkinter as tk
 from tkinter import ttk
 import ui.admin.views.disciplines_view as disciplines_view_module
-from entities.discipline import Discipline
+import ui.admin.admin_page as admin
 from repositories.discipline_repo import get_disciplines, get_discipline_id_by_value, delete_discipline
 from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
 
@@ -153,3 +153,19 @@ class TestDisciplinesView(unittest.TestCase):
             self.assertEqual(item_values[1], discipline.name)
             self.assertEqual(item_values[2], discipline.study_year)
             self.assertEqual(item_values[3], discipline.teacher_full_name)
+
+    def test_go_back(self):
+        # Test the go_back method
+        # Assert that the master's switch_frame method is called with AdminPage
+
+        # Create a mock master
+        mock_master = Mock()
+
+        # Set the view's master to the mock master
+        self.view.master = mock_master
+
+        # Call the go_back method
+        self.view.go_back()
+
+        # Assert that the master's switch_frame method is called with AdminPage
+        mock_master.switch_frame.assert_called_with(admin.AdminPage)
