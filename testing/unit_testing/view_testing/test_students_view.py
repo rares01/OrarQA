@@ -23,6 +23,40 @@ class TestStudentsView(unittest.TestCase):
         # Test the display method to ensure the UI is set up correctly
         # Assert that the UI elements are initialized correctly
 
+        # Create a mock student list
+        students = [
+            (5, "Alice", "Smith", 1, "A", 101),
+            (6, "Bob", "Jones", 1, "A", 101),
+            (7, "Adrian", "Smau", 1, "A", 102),
+            (8, "Rares", "Gramescu", 1, "A", 102)
+        ]
+
+        # Mock the get_students function to return the mock student list
+        get_students_mock = Mock(return_value=[
+            Mock(id=id, first_name=first_name, last_name=last_name, study_year=study_year, semi_year=semi_year,
+                 discipline=discipline)
+            for id, first_name, last_name, study_year, semi_year, discipline in students
+        ])
+
+        # Mock the get_groups function to return an empty list
+        get_groups_mock = Mock(return_value=[])
+
+        # Mock the get_full_teachers function to return an empty list
+        get_full_teachers_mock = Mock(return_value=[])
+
+        # Patch the repository functions with the mock functions
+        with patch("repositories.student_repo.get_students", get_students_mock), \
+             patch("repositories.student_group_repo.get_student_groups_values", get_groups_mock), \
+             patch("repositories.teacher_repo.get_full_teachers", get_full_teachers_mock):
+            # Call the display method
+            self.view.display()
+
+            # Assert that the treeview is populated with the correct data
+            tree_items = self.view.tree.get_children()
+            for i, student in enumerate(students):
+                item_values = self.view.tree.item(tree_items[i])['values']
+                self.assertEqual(list(item_values), list(student[0:6]))
+
         # Check the existence of UI elements
         self.assertIsInstance(self.view.tree, ttk.Treeview)
         self.assertIsInstance(self.view.add_button, ttk.Button)
