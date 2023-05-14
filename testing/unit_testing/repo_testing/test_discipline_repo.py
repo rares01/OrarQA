@@ -124,7 +124,7 @@ class DisciplineTesting(unittest.TestCase):
     @patch('repositories.discipline_repo.get_teacher_id_by_full_name')
     @patch('repositories.discipline_repo.get_id_by_value')
     def test_given_discipline_repo_when_add_disciplines_then_successful(self, mock_study_year_method,
-                                                                               mock_teacher_method, mock_conn):
+                                                                        mock_teacher_method, mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect_2
