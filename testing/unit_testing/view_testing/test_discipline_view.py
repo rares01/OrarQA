@@ -3,7 +3,9 @@ from unittest.mock import patch, Mock
 import tkinter as tk
 from tkinter import ttk
 import ui.admin.views.disciplines_view as disciplines_view_module
+from entities.discipline import Discipline
 from repositories.discipline_repo import get_disciplines, get_discipline_id_by_value, delete_discipline
+from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
 
 
 class TestDisciplinesView(unittest.TestCase):
@@ -19,6 +21,29 @@ class TestDisciplinesView(unittest.TestCase):
     def test_display(self):
         # Test the display method to ensure the UI is set up correctly
         # Assert that the UI elements are initialized correctly
+
+        # Test the display method to populate the treeview with disciplines
+
+        # Set up the expected disciplines
+        expected_disciplines = [
+            (10, "TW", 1, "Jane Smith"),
+            (11, "BD", 1, "Jane Smith"),
+            (12, "SD", 1, "Jane Smith")
+        ]
+
+        get_disciplines = Mock(
+            return_value=[Mock(id=id, name=name, study_year_id=study_year_id, teacher_name=teacher_name)
+                          for id, name, study_year_id, teacher_name in expected_disciplines])
+
+        # Patch the get_disciplines function to return the expected disciplines
+        with patch("repositories.discipline_repo.get_disciplines", get_disciplines):
+            self.view.display()
+
+            # Assert that the treeview is populated with the disciplines
+            tree_items = self.view.tree.get_children()
+            for i, discipline in enumerate(expected_disciplines):
+                item_values = self.view.tree.item(tree_items[i])['values']
+                self.assertEqual(list(item_values), list(discipline[0:4]))
 
         # Check the existence of UI elements
         self.assertIsInstance(self.view.tree, ttk.Treeview)
@@ -38,8 +63,8 @@ class TestDisciplinesView(unittest.TestCase):
         # Test the on_tree_select method when an item is selected in the treeview
         # Assert that the delete button state is enabled
 
-        # Select an item in the treeview
-        # todo: self.view.tree.selection_set.return_value = "selection"
+        selected_item = self.view.tree.get_children()[0]  # Select the first item in the treeview
+        self.view.tree.selection_set(selected_item)
 
         # Call the on_tree_select method
         self.view.on_tree_select(Mock())
@@ -86,6 +111,18 @@ class TestDisciplinesView(unittest.TestCase):
             self.assertEqual(item_values[1], discipline.name)
             self.assertEqual(item_values[2], discipline.study_year)
             self.assertEqual(item_values[3], discipline.teacher_full_name)
+
+    def test_add_discipline(self):
+        # Test the add_discipline method to add a new discipline to the treeview
+
+        # Mock the switch_frame method
+        self.view.master.switch_frame = Mock()
+
+        # Call the add_discipline method
+        self.view.add_discipline()
+
+        # Assert that the frame is switched correctly
+        self.view.master.switch_frame.assert_called_with(AddDisciplineForm)
 
     def test_delete_discipline(self):
         # Test the delete_discipline method to delete a selected discipline
