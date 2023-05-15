@@ -11,7 +11,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     @patch('repositories.study_year_repo.connection')
     def test_given_study_year_repo_when_get_study_year_values_then_returns_study_year_numbers(self, mock_conn):
         mock_cursor = MagicMock()
-        mock_cursor.fetchall.return_value = [(1,), (2,), (33,)]
+        mock_cursor.fetchall.return_value = [(1,), (2,), (3,)]
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_study_years_values()
