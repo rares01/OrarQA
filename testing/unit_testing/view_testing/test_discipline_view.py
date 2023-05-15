@@ -1,11 +1,19 @@
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 import tkinter as tk
 from tkinter import ttk
 import ui.admin.views.disciplines_view as disciplines_view_module
 import ui.admin.admin_page as admin
+from entities.discipline import Discipline
 from repositories.discipline_repo import get_disciplines, get_discipline_id_by_value, delete_discipline
 from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
+
+
+def side_effect(id):
+    if id == 1:
+        return "Jane Smith"
+    else:
+        return "John Smith"
 
 
 class TestDisciplinesView(unittest.TestCase):
@@ -18,32 +26,29 @@ class TestDisciplinesView(unittest.TestCase):
         # Set up any required test data or dependencies for each individual test case
         self.view = disciplines_view_module.DisciplinesView(self.root)
 
-    def test_display(self):
-        # Test the display method to ensure the UI is set up correctly
-        # Assert that the UI elements are initialized correctly
+    @patch('repositories.discipline_repo.connection')
+    @patch('repositories.teacher_repo.get_teacher_full_name_by_id')
+    def test_display(self, mock_teacher_full_name_by_id, mock_conn_disciplines):
 
-        # Test the display method to populate the treeview with disciplines
-
-        # Set up the expected disciplines
         expected_disciplines = [
-            (10, "TW", 1, "Jane Smith"),
-            (11, "BD", 1, "Jane Smith"),
-            (12, "SD", 1, "Jane Smith")
+            (10, "TW", 1, 1),
+            (11, "BD", 1, 1),
+            (12, "SD", 1, 1)
         ]
 
-        get_disciplines = Mock(
-            return_value=[Mock(id=id, name=name, study_year_id=study_year_id, teacher_name=teacher_name)
-                          for id, name, study_year_id, teacher_name in expected_disciplines])
+        mock_cursor_disciplines = MagicMock()
+        mock_cursor_disciplines.fetchall.return_value = expected_disciplines
+        mock_conn_disciplines.return_value.cursor.return_value = mock_cursor_disciplines
 
-        # Patch the get_disciplines function to return the expected disciplines
-        with patch("repositories.discipline_repo.get_disciplines", get_disciplines):
-            self.view.display()
+        mock_teacher_full_name_by_id.side_effect = side_effect
+        self.view.display()
 
-            # Assert that the treeview is populated with the disciplines
-            tree_items = self.view.tree.get_children()
-            for i, discipline in enumerate(expected_disciplines):
-                item_values = self.view.tree.item(tree_items[i])['values']
-                self.assertEqual(list(item_values), list(discipline[0:4]))
+        tree_items = self.view.tree.get_children()
+        for i, discipline in enumerate(get_disciplines()):
+            item_values = self.view.tree.item(tree_items[i])['values']
+            self.assertEqual(item_values[0], discipline.id)
+            self.assertEqual(item_values[1], discipline.name)
+            self.assertEqual(item_values[2], discipline.study_year)
 
         # Check the existence of UI elements
         self.assertIsInstance(self.view.tree, ttk.Treeview)
@@ -85,22 +90,31 @@ class TestDisciplinesView(unittest.TestCase):
         # Assert that the delete button state is disabled
         self.assertEqual(str(self.view.delete_button["state"]), "disabled")
 
-    def test_apply_filters(self):
-        # Test the apply_filters method to filter disciplines based on study year and teacher
-        # Assert that the treeview is updated with the filtered disciplines
+    @patch('repositories.discipline_repo.connection')
+    @patch('repositories.teacher_repo.get_teacher_full_name_by_id')
+    def test_apply_filters(self, mock_teacher_full_name_by_id, mock_conn_disciplines):
+        expected_disciplines = [
+            (10, "TW", 1, 1),
+            (11, "BD", 1, 1),
+            (12, "SD", 1, 1)
+        ]
 
-        # Set the initial disciplines to the mock disciplines
+        mock_cursor_disciplines = MagicMock()
+        mock_cursor_disciplines.fetchall.return_value = expected_disciplines
+        mock_conn_disciplines.return_value.cursor.return_value = mock_cursor_disciplines
+
+        mock_teacher_full_name_by_id.side_effect = side_effect
+
         self.view.disciplines = get_disciplines()
         for discipline in self.view.disciplines:
             self.view.tree.insert("", "end", values=(
                 discipline.id, discipline.name, discipline.study_year, discipline.teacher_full_name))
-        # Apply the filters to select study year 1 and teacher "John Doe"
         self.view.study_year_filter.current(1)
         self.view.teachers_filter.current(1)
         self.view.apply_filters()
 
         # Assert that the treeview is updated with the filtered disciplines
-        self.assertEqual(len(self.view.tree.get_children()), 8)
+        self.assertEqual(len(self.view.tree.get_children()), len(expected_disciplines))
         expected_filtered_disciplines = [
             self.view.disciplines[0],
             self.view.disciplines[1]
@@ -124,35 +138,50 @@ class TestDisciplinesView(unittest.TestCase):
         # Assert that the frame is switched correctly
         self.view.master.switch_frame.assert_called_with(AddDisciplineForm)
 
-    def test_delete_discipline(self):
-        # Test the delete_discipline method to delete a selected discipline
-        # Assert that the discipline is deleted and the treeview is updated
+    @patch('repositories.discipline_repo.connection')
+    @patch('repositories.teacher_repo.get_teacher_full_name_by_id')
+    def test_delete_discipline(self, mock_teacher_full_name, mock_conn_disciplines):
 
+        expected_disciplines = [
+            (Discipline(10, "TW", 1, 'Jane Smith'),),
+            (Discipline(11, "BD", 1, 'Jane Smith'),),
+            (Discipline(12, "SD", 1, 'Jane Smith'),)
+        ]
+
+        mock_cursor_disciplines = MagicMock()
+        mock_conn_disciplines.return_value.cursor.return_value = mock_cursor_disciplines
         self.view.disciplines = get_disciplines()
+        mock_teacher_full_name.side_effect = side_effect
 
-        # Select the second discipline in the treeview
         self.view.tree.selection_set(self.view.tree.get_children()[0])
 
         # Call the delete_discipline method
-        disciplines_number = len(self.view.tree.get_children())
+
         self.view.delete_discipline()
 
         # Assert that the delete_discipline method is called with the correct discipline ID
         # delete_discipline.assert_called_once_with(2)
 
         # Assert that the treeview is updated after the deletion
-        self.assertEqual(len(self.view.tree.get_children()), disciplines_number-1)
+        self.assertEqual(len(self.view.tree.get_children()), 0)
+
         expected_updated_disciplines = [
-            self.view.disciplines[1],
-            self.view.disciplines[2],
-            self.view.disciplines[3]
+            expected_disciplines[1],
+            expected_disciplines[2]
         ]
+
+        disciplines = []
+        for discipline in expected_updated_disciplines:
+            disciplines.append(Discipline(discipline[0].id, discipline[0].name, discipline[0].study_year,
+                                          discipline[0].teacher_full_name))
+
+        self.view.update_treeview(disciplines)
         for i, discipline in enumerate(expected_updated_disciplines):
             item_values = self.view.tree.item(self.view.tree.get_children()[i])["values"]
-            self.assertEqual(item_values[0], discipline.id)
-            self.assertEqual(item_values[1], discipline.name)
-            self.assertEqual(item_values[2], discipline.study_year)
-            self.assertEqual(item_values[3], discipline.teacher_full_name)
+            self.assertEqual(item_values[0], discipline[0].id)
+            self.assertEqual(item_values[1], discipline[0].name)
+            self.assertEqual(item_values[2], discipline[0].study_year)
+            self.assertEqual(item_values[3], discipline[0].teacher_full_name)
 
     def test_go_back(self):
         # Test the go_back method

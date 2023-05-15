@@ -11,7 +11,7 @@ from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 from repositories.time_slot_repo import get_time_slot_values
 from repositories.weekdays_repo import get_weekdays_values
-from ui.admin.forms.timetable.add_timetable_entry import AddTimetableEntryForm
+from ui.admin.forms.timetable.add_timetable_entry import *
 
 
 def go_to_html():

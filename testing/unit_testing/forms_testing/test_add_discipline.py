@@ -1,78 +1,65 @@
-import unittest
 import tkinter as tk
-from tkinter import ttk
-from unittest.mock import Mock
+import unittest
+from unittest.mock import Mock, patch, MagicMock
 
-from ui.admin.views import disciplines_view
-from repositories.discipline_repo import add_discipline, get_disciplines
-from repositories.study_year_repo import get_study_years_values
-from repositories.teacher_repo import get_teacher_full_names
-from ui.admin.forms.disciplines.add_discipline import AddDisciplineForm
-from ui.admin.views.disciplines_view import DisciplinesView
+import ui.admin.views.disciplines_view as view
 
 
 class TestAddDisciplineForm(unittest.TestCase):
     def setUp(self):
-        # Create a root window for testing
         self.root = tk.Tk()
 
-    def test_handle(self):
-        # Test the handle method to add a discipline
-        # Assert that the discipline is added correctly
+    @patch('repositories.discipline_repo.connection')
+    def test_handle(self, mock_conn_disciplines):
+        form = view.AddDisciplineForm(self.root)
 
-        # Create an instance of AddDisciplineForm
-        form = AddDisciplineForm(self.root)
-        view = DisciplinesView(self.root)
-
-        # Set up the test data
-        name = "Math"
+        name = "Maths"
         year = 1
         teacher = "John Doe"
 
-        # Call the handle method
+        disciplines = [
+            (10, "TW", 1, 1),
+            (11, "BD", 1, 1),
+            (12, "SD", 1, 1)
+        ]
+
+        mock_cursor_disciplines = MagicMock()
+        mock_cursor_disciplines.fetchall.return_value = disciplines
+        mock_conn_disciplines.return_value.cursor.return_value = mock_cursor_disciplines
+
         form.handle(name_entry=tk.StringVar(value=name), year_entry=tk.StringVar(value=str(year)),
                     teacher_entry=tk.StringVar(value=teacher))
 
-        # Get the list of disciplines
-        disciplines = get_disciplines()
+        mock_cursor_disciplines.execute.assert_called_once_with(
+            "INSERT INTO discipline (name, study_year_id, teacher_id) VALUES (%s,%s,%s)",
+            ('Maths', 1, 2,))
 
-        # Assert that the discipline is added correctly
-        self.assertEqual(len(disciplines), len(view.disciplines) + 1)
-        self.assertEqual(disciplines[len(disciplines)-1].name, name)
-        self.assertEqual(disciplines[len(disciplines)-1].study_year, year)
-        self.assertEqual(disciplines[len(disciplines)-1].teacher_full_name, teacher)
+    @patch('repositories.discipline_repo.connection')
+    def test_fetch_added_discipline(self, mock_conn_disciplines):
+        form = view.AddDisciplineForm(self.root)
 
-    # todo: improve, does not work
-    def test_go_back(self):
-        # Test the go_back method to navigate back to the disciplines view
-        # Assert that the disciplines view is displayed and the disciplines are updated
-
-        # Create an instance of AddDisciplineForm
-        form = AddDisciplineForm(self.root)
-
-        # Create a mock master
         mock_master = Mock()
-
-        # Set the view's master to the mock master
         form.master = mock_master
 
-        # Set up the test data
-        disciplines = [{"name": "Math", "year": "1", "teacher": "John Doe"}]
-        form.disciplines_view = disciplines_view.DisciplinesView(self.root)
-        form.disciplines_view.set_disciplines(disciplines)
+        expected_disciplines = [
+            (10, "TW", 1, 1),
+            (11, "BD", 1, 1),
+            (12, "SD", 1, 1)
+        ]
 
-        # Call the go_back method
+        mock_cursor_disciplines = MagicMock()
+        mock_cursor_disciplines.fetchall.return_value = expected_disciplines
+        mock_conn_disciplines.return_value.cursor.return_value = mock_cursor_disciplines
+        form.disciplines_view = view.DisciplinesView(self.root)
+        form.disciplines_view.set_disciplines(expected_disciplines)
+
         form.go_back()
 
-        # Get the current frame
         current_frame = self.root.winfo_children()[-1]
 
-        # Assert that the current frame is the disciplines view
-        self.assertIsInstance(current_frame, disciplines_view.DisciplinesView)
+        self.assertIsInstance(current_frame, view.DisciplinesView)
 
-        # Assert that the disciplines are updated in the view
         updated_disciplines = form.disciplines_view.disciplines
-        self.assertEqual(len(updated_disciplines), 1)
-        self.assertEqual(updated_disciplines[0]["name"], disciplines[0]["name"])
-        self.assertEqual(updated_disciplines[0]["year"], disciplines[0]["year"])
-        self.assertEqual(updated_disciplines[0]["teacher"], disciplines[0]["teacher"])
+        self.assertEqual(len(updated_disciplines), len(expected_disciplines))
+        for index in range(len(updated_disciplines)):
+            self.assertEqual(updated_disciplines[index].name, expected_disciplines[index][1])

@@ -1,6 +1,6 @@
 import unittest
 from tkinter import ttk
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 import tkinter as tk
 import ui.admin.admin_page as admin
 from ui.admin.forms.teachers.add_teacher_form import AddTeacherForm
@@ -14,9 +14,8 @@ class TestTeachersView(unittest.TestCase):
         root = tk.Tk()
         self.view = TeachersView(root)
 
-    def test_display(self):
-        # Test the display method to ensure the UI is set up correctly
-        # Assert that the treeview is populated with the correct data
+    @patch('repositories.teacher_repo.connection')
+    def test_display(self, mock_conn):
 
         # Create a mock teacher list
         teachers = [
@@ -26,21 +25,16 @@ class TestTeachersView(unittest.TestCase):
             (4, "John", "Doe")
         ]
 
-        # Mock the get_full_teachers function to return the mock teacher list
-        get_full_teachers = Mock(
-            return_value=[Mock(id=id, first_name=first_name, last_name=last_name) for id, first_name, last_name in
-                          teachers])
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = teachers
+        mock_conn.return_value.cursor.return_value = mock_cursor
 
-        # Set the get_full_teachers function as the target function for patching
-        with patch("repositories.teacher_repo.get_full_teachers", get_full_teachers):
-            # Call the display method
-            self.view.display()
+        self.view.display()
 
-            # Assert that the treeview is populated with the correct data
-            tree_items = self.view.tree.get_children()
-            for i, teacher in enumerate(teachers):
-                item_values = self.view.tree.item(tree_items[i])['values']
-                self.assertEqual(list(item_values), list(teacher[0:3]))
+        tree_items = self.view.tree.get_children()
+        for i, teacher in enumerate(teachers):
+            item_values = self.view.tree.item(tree_items[i])['values']
+            self.assertEqual(list(item_values), list(teacher))
 
         # Assert that the UI elements are initialized correctly
 
@@ -52,12 +46,6 @@ class TestTeachersView(unittest.TestCase):
 
         # Check the initial state of UI elements
         self.assertEqual(str(self.view.delete_button["state"]), "disabled")
-
-    def test_apply_filters(self):
-
-        # todo: Andrei Mosor,
-        # once the similar methods in the test_discipline_view and test_students_view are updated,
-        # add them here in a similar manner
 
     def test_on_tree_select(self):
         # Test the on_tree_select method when an item is selected in the treeview
