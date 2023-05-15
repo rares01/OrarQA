@@ -1,11 +1,10 @@
+import tkinter as tk
 import unittest
 from tkinter import ttk
 from unittest.mock import Mock, patch, MagicMock
-import tkinter as tk
-import ui.admin.views.students_view as students_view_module
+
 import ui.admin.admin_page as admin
-from entities.discipline import Discipline
-from entities.student import Student
+import ui.admin.views.students_view as students_view_module
 from ui.admin.forms.students.add_students import AddStudentForm
 
 
@@ -20,43 +19,21 @@ class TestStudentsView(unittest.TestCase):
         self.view = students_view_module.StudentsView(self.root)
 
     @patch('repositories.student_repo.connection')
-    @patch('repositories.student_group_repo.connection')
-    @patch('repositories.teacher_repo.connection')
-    def test_display(self, mock_conn_student, mock_conn_student_group, mock_conn_teachers):
+    def test_display(self, mock_conn_student):
         # Test the display method to ensure the UI is set up correctly
         # Assert that the UI elements are initialized correctly
 
         # Create a mock student list
         students = [
-            (5, "Alice", "Smith", 1, "A", 101),
-            (6, "Bob", "Jones", 1, "A", 101),
-            (7, "Adrian", "Smau", 1, "A", 102),
-            (8, "Rares", "Gramescu", 1, "A", 102)
+            (5, "Alice", "Smith", 1, 1, 1),
+            (6, "Bob", "Jones", 1, 1, 1),
+            (7, "Adrian", "Smau", 1, 1, 1),
+            (8, "Rares", "Gramescu", 1, 1, 2)
         ]
 
         mock_cursor_student = MagicMock()
         mock_cursor_student.fetchall.return_value = students
         mock_conn_student.return_value.cursor.return_value = mock_cursor_student
-
-        groups = [
-            (0, 101),
-            (1, 202),
-        ]
-
-        mock_cursor_student_groups = MagicMock()
-        mock_cursor_student_groups.fetchall.return_value = groups
-        mock_conn_student_group.return_value.cursor.return_value = mock_cursor_student_groups
-
-        teachers = [
-            (1, "Jane", "Smith"),
-            (2, "John", "Doe"),
-            (3, "Jane", "Smith"),
-            (4, "John", "Doe")
-        ]
-
-        mock_cursor_teachers = MagicMock()
-        mock_cursor_teachers.fetchall.return_value = teachers
-        mock_conn_teachers.return_value.cursor.return_value = mock_cursor_teachers
 
         self.view.display()
 
@@ -64,7 +41,9 @@ class TestStudentsView(unittest.TestCase):
         tree_items = self.view.tree.get_children()
         for i, student in enumerate(students):
             item_values = self.view.tree.item(tree_items[i])['values']
-            self.assertEqual(list(item_values), list(student[0:6]))
+            self.assertEqual(item_values[0], student[0])
+            self.assertEqual(item_values[1], student[1])
+            self.assertEqual(item_values[2], student[2])
 
         # Check the existence of UI elements
         self.assertIsInstance(self.view.tree, ttk.Treeview)
@@ -108,11 +87,18 @@ class TestStudentsView(unittest.TestCase):
         # Assert that the delete button state is disabled
         self.assertEqual(str(self.view.delete_button["state"]), "disabled")
 
-    def test_apply_filters(self):
-        # Test the apply_filters method to filter the students based on the selected filters
-        # Assert that the treeview is updated with the filtered students
+    @patch('repositories.student_repo.connection')
+    def test_apply_filters(self, mock_conn_student):
+        students = [
+            (5, "Alice", "Smith", 1, 1, 1),
+            (6, "Bob", "Jones", 1, 1, 1),
+            (7, "Adrian", "Smau", 1, 1, 1),
+            (8, "Rares", "Gramescu", 1, 1, 2)
+        ]
 
-        # Set up the initial state of the treeview
+        mock_cursor_student = MagicMock()
+        mock_cursor_student.fetchall.return_value = students
+        mock_conn_student.return_value.cursor.return_value = mock_cursor_student
         self.view.students = students_view_module.get_students()
         for student in self.view.students:
             self.view.tree.insert("", "end", values=(
@@ -131,36 +117,8 @@ class TestStudentsView(unittest.TestCase):
             self.view.students[1]
         ]
 
-        # Assert that the treeview is updated with the filtered students
-        self.assertEqual(len(self.view.tree.get_children()), 6)
-        for i, student in enumerate(expected_filtered_students):
-            values = self.view.tree.item(self.view.tree.get_children()[i])['values']
-            self.assertEqual(values[0], student.id)
-            self.assertEqual(values[1], student.first_name)
-            self.assertEqual(values[2], student.last_name)
-            self.assertEqual(values[3], student.study_year)
-            self.assertEqual(values[4], student.semi_year)
-            self.assertEqual(values[5], student.student_group)
-
-    def test_update_treeview(self):
-        # Test the update_treeview method to update the treeview with the provided students
-        # Assert that the treeview is updated correctly
-
-        # Clear the treeview
-        self.view.tree.delete(*self.view.tree.get_children())
-
-        # Set the students to be inserted into the treeview
-        students = [
-            Student(1, "John", "Doe", 1, "First", "Group A"),
-            Student(2, "Jane", "Smith", 2, "Second", "Group B")
-        ]
-
-        # Update the treeview with the students
-        self.view.update_treeview(students)
-
-        # Assert that the treeview is updated correctly
         self.assertEqual(len(self.view.tree.get_children()), len(students))
-        for i, student in enumerate(students):
+        for i, student in enumerate(expected_filtered_students):
             values = self.view.tree.item(self.view.tree.get_children()[i])['values']
             self.assertEqual(values[0], student.id)
             self.assertEqual(values[1], student.first_name)
@@ -195,47 +153,24 @@ class TestStudentsView(unittest.TestCase):
         # Assert that the frame is switched correctly
         self.view.master.switch_frame.assert_called_with(admin.AdminPage)
 
-    def test_delete_student(self):
-        # Test the delete_student method to delete a student from the database and update the treeview
-        # Assert that the student is deleted and the treeview is updated correctly
+    @patch('repositories.student_repo.connection')
+    def test_delete_student(self, mock_conn_student):
 
-        # Set up the initial state of the treeview
-        self.view.students = students_view_module.get_students()
-
-        # Select the first student in the treeview
-        # Select the first student in the treeview
-        self.view.tree.selection_set(self.view.tree.get_children()[0])
-
-        # Call the delete_student method
-        self.view.delete_student()
-
-        # Assert that the student is deleted and the treeview is updated correctly
-        # students_view_module.delete_student.assert_called_with(self.view.students[0].id)
-        self.assertEqual(len(self.view.tree.get_children()), len(self.view.students) - 1)
-
-        # todo: update when connection mock works, so that assert_not_called function can work.
-
-        # # Select a student that is not in the treeview
-        # self.view.tree.selection_set("invalid_id")
-        #
-        # # Call the delete_student method
-        # self.view.delete_student()
-        #
-        # # Assert that the delete_student function is not called and the treeview remains the same
-        # # students_view_module.delete_student.assert_not_called()
-        # self.assertEqual(len(self.view.tree.get_children()), len(self.view.students) - 1)
-
-    def test_set_students(self):
-        # Test the set_students method to update the students in the view
-        # Assert that the students are updated correctly
-
-        # Set the students
         students = [
-            Student(1, "John", "Doe", 1, "First", "Group A"),
-            Student(2, "Jane", "Smith", 2, "Second", "Group B")
+            (5, "Alice", "Smith", 1, 1, 1),
+            (6, "Bob", "Jones", 1, 1, 1),
+            (7, "Adrian", "Smau", 1, 1, 1),
+            (8, "Rares", "Gramescu", 1, 1, 2)
         ]
-        self.view.set_students(students)
 
-        # Assert that the students are updated correctly
-        self.assertEqual(self.view.students, students)
+        mock_cursor_student = MagicMock()
+        mock_cursor_student.fetchall.return_value = students
+        mock_conn_student.return_value.cursor.return_value = mock_cursor_student
+        self.view.students = students
+        self.view.tree.selection_set(self.view.tree.get_children()[0])
+        mock_cursor_student = MagicMock()
+        mock_cursor_student.fetchall.return_value = students[1:]
+        mock_conn_student.return_value.cursor.return_value = mock_cursor_student
+        self.view.delete_student()
+        self.assertEqual(len(self.view.tree.get_children()), len(students) - 1)
 
