@@ -1,31 +1,51 @@
 import unittest
+from unittest.mock import MagicMock, patch
 
 from repositories.semi_year_repo import get_semi_years_values, get_id_by_value, get_value_by_id
 
 
 class StudyYearRepoTesting(unittest.TestCase):
-    def setUp(self):
-        self.semi_years = ['A', 'B', 'E']
-        self.mock_id = 1
-        self.mock_wrong_id = 10000
-        self.mock_semi_year = 'A'
-        self.mock_wrong_semi_year = 'C'
+    @patch('repositories.semi_year_repo.connection')
+    def test_given_timeslot_repo_when_get_semi_years_values_then_returns_semi_years(self, mock_conn):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [("Spring 2022",), ("Fall 2022",)]
+        mock_conn.return_value.cursor.return_value = mock_cursor
 
-    def test_given_semi_year_repo_when_get_semi_year_values_then_returns_semi_year_names(self):
+        expected_result = ["Spring 2022", "Fall 2022"]
         result = get_semi_years_values()
-        self.assertEqual(result, self.semi_years)
 
-    def test_given_get_id_by_value_when_semi_year_is_correct_then_returns_semi_year_id(self):
-        result = get_id_by_value(self.mock_semi_year)
-        self.assertEqual(result, self.mock_id)
+        self.assertEqual(result, expected_result)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT name FROM semiyear")
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()
 
-    def test_given_get_id_by_value_when_weekday_is_wrong_then_throws_error(self):
-        self.assertRaises(IndexError, get_id_by_value(self.mock_wrong_semi_year))
+    @patch('repositories.semi_year_repo.connection')
+    def test_given_semiyear_repo_when_get_id_by_value_with_valid_input_then_returns_id(self, mock_conn):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [(1, "A")]
+        mock_conn.return_value.cursor.return_value = mock_cursor
 
-    def test_given_get_name_by_id_when_weekday_is_correct_then_returns_weekdays_name(self):
-        result = get_value_by_id(self.mock_id)
-        self.assertEqual(result, self.mock_semi_year)
+        expected_result = 1
+        result = get_id_by_value("A")
 
-    def test_given_get_name_by_id_when_weekday_is_wrong_then_throws_error(self):
-        self.assertRaises(IndexError, get_value_by_id(self.mock_wrong_id))
+        self.assertEqual(result, expected_result)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT id FROM semiyear WHERE name=%s", ("A",))
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()
 
+    @patch('repositories.semi_year_repo.connection')
+    def test_given_semester_repo_when_get_value_by_id_with_valid_input_then_returns_value(self, mock_conn):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [('A',)]
+        mock_conn.return_value.cursor.return_value = mock_cursor
+
+        expected_result = 'A'
+        result = get_value_by_id(1)
+
+        self.assertEqual(result, expected_result)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT name FROM semiyear WHERE id=%s", (1,))
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()

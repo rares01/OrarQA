@@ -5,10 +5,12 @@ from repositories.weekdays_repo import get_name_by_id as get_weekday_name
 from repositories.time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
 from repositories.teacher_repo import get_teacher_id_by_full_name as get_teacher_id, get_teacher_full_name_by_id \
     as get_teacher_full_name
-from repositories.discipline_repo import get_discipline_id_by_value as get_discipline_id, get_discipline_by_id as get_discipline_name
+from repositories.discipline_repo import get_discipline_id_by_value as get_discipline_id, \
+    get_discipline_by_id as get_discipline_name
 from repositories.study_year_repo import get_id_by_value as get_study_year_id, get_value_by_id as get_study_year_number
 from repositories.semi_year_repo import get_id_by_value as get_semi_year_id, get_value_by_id as get_semi_year_name
-from repositories.student_group_repo import get_id_by_value as get_student_group_id, get_value_by_id as get_student_group_name
+from repositories.student_group_repo import get_id_by_value as get_student_group_id, \
+    get_value_by_id as get_student_group_name
 
 
 def add_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, semi_year, student_group, scheduler_id):
@@ -81,6 +83,8 @@ def get_entries():
 
 
 print(get_entries())
+
+
 def fetch_rows_with_entity(rows):
     entries = []
     for row in rows:
@@ -97,6 +101,8 @@ def fetch_rows_with_entity(rows):
         entries.append(scheduler_entry)
 
     return entries
+
+
 def get_entries_with_entity():
     conn = connection()
     cur = conn.cursor()
