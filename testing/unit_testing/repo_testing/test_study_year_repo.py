@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from repositories.study_year_repo import get_study_years_values, get_id_by_value
+from repositories.study_year_repo import get_study_years_values, get_id_by_value, get_value_by_id
 
 
 class StudyYearRepoTesting(unittest.TestCase):
@@ -37,15 +37,15 @@ class StudyYearRepoTesting(unittest.TestCase):
         mock_cursor.close.assert_called_once()
 
     @patch('repositories.study_year_repo.connection')
-    def test_given_study_year_repo_when_get_id_by_value_with_valid_input_then_returns_id(self, mock_conn):
+    def test_given_study_year_repo_when_get_value_by_id_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
         mock_conn.return_value.cursor.return_value = mock_cursor
 
-        result = get_id_by_value(1)
+        result = get_value_by_id(1)
 
         self.assertEqual(result, 1)
         mock_conn.assert_called_once()
-        mock_cursor.execute.assert_called_once_with("SELECT id FROM studyyear WHERE number=%s", (1,))
+        mock_cursor.execute.assert_called_once_with("SELECT number FROM studyyear WHERE id=%s", (1,))
         mock_cursor.fetchall.assert_called_once()
         mock_cursor.close.assert_called_once()
