@@ -7,10 +7,6 @@ from repositories.weekdays_repo import get_weekdays_values, get_id_by_value, get
 class WeekdaysRepoTesting(unittest.TestCase):
     def setUp(self):
         self.weekdays = ['Monday', 'Tuesday', 'Wednesday']
-        self.mock_id = 1
-        self.mock_wrong_id = 10000
-        self.mock_weekday = 'Monday'
-        self.mock_wrong_weekday = 'Saturday'
 
     @patch('repositories.weekdays_repo.connection')
     def test_given_study_year_repo_when_get_study_year_values_then_returns_study_year_numbers(self, mock_conn):

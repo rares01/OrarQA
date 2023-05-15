@@ -5,13 +5,6 @@ from repositories.semi_year_repo import get_semi_years_values, get_id_by_value, 
 
 
 class StudyYearRepoTesting(unittest.TestCase):
-    def setUp(self):
-        self.semi_years = ['A', 'B', 'E']
-        self.mock_id = 1
-        self.mock_wrong_id = 10000
-        self.mock_semi_year = 'A'
-        self.mock_wrong_semi_year = 'C'
-
     @patch('repositories.semi_year_repo.connection')
     def test_given_timeslot_repo_when_get_semi_years_values_then_returns_semi_years(self, mock_conn):
         mock_cursor = MagicMock()
@@ -56,4 +49,3 @@ class StudyYearRepoTesting(unittest.TestCase):
         mock_cursor.execute.assert_called_once_with("SELECT name FROM semiyear WHERE id=%s", (1,))
         mock_cursor.fetchall.assert_called_once()
         mock_cursor.close.assert_called_once()
-

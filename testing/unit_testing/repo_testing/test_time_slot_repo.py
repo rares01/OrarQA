@@ -5,15 +5,6 @@ from repositories.time_slot_repo import get_time_slot_values, get_id_by_value, g
 
 
 class TimeSlotRepoTesting(unittest.TestCase):
-    def setUp(self):
-        self.time_slots = ['8-10', '10-12', '12-14', '14-16', '16-18', '18-20']
-        self.mock_id = 1
-        self.mock_wrong_id = 10000
-        self.mock_time_slot = '8:00-10:00'
-        self.mock_start_hour = 8
-        self.mock_end_hour = 10
-        self.mock_wrong_end_hour = 24
-
 
     @patch('repositories.time_slot_repo.connection')
     def test_given_teacher_repo_when_get_time_slot_values_then_returns_values(self, mock_conn):
