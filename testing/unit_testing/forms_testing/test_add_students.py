@@ -17,14 +17,14 @@ class TestAddStudentForm(unittest.TestCase):
         first_name = "John"
         last_name = "Doe"
         year = 1
-        semi_year = 1
-        student_group = 1
+        semi_year = "A"
+        student_group = 101
 
         students = [
-            (5, "Alice", "Smith", 1, "A", 101),
-            (6, "Bob", "Jones", 1, "A", 101),
-            (7, "Adrian", "Smau", 1, "A", 102),
-            (8, "Rares", "Gramescu", 1, "A", 102)
+            (5, "Alice", "Smith", 1, 1, 1),
+            (6, "Bob", "Jones", 1, 1, 1),
+            (7, "Adrian", "Smau", 1, 1, 2),
+            (8, "Rares", "Gramescu", 1, 1, 2)
         ]
 
         mock_cursor_students = MagicMock()
@@ -32,13 +32,13 @@ class TestAddStudentForm(unittest.TestCase):
         mock_conn_students.return_value.cursor.return_value = mock_cursor_students
 
         handle(first_name_entry=tk.StringVar(value=first_name), last_name_entry=tk.StringVar(value=last_name),
-                    study_year_var=tk.StringVar(value=str(year)), semi_year_var=tk.StringVar(value=str(semi_year)),
-                    student_group_var=tk.StringVar(value=str(student_group)))
+               study_year_var=tk.StringVar(value=year), semi_year_var=tk.StringVar(value=semi_year),
+               student_group_var=tk.StringVar(value=str(student_group)))
 
         mock_cursor_students.execute.assert_called_once_with(
-            "INSERT INTO student "
-            "(first_name, last_name, study_year_id, semi_year_id, student_group_id) VALUES (%s,%s,%s,%s,%s)",
-            ('John', 'Doe', 1, 1, 1))
+            "INSERT INTO student (first_name, last_name, study_year_id, semi_year_id, student_group_id) VALUES (%s, "
+            "%s, %s, %s, %s)",
+            ('John', 'Doe', "1", "1", "1"))
 
     @patch('repositories.student_repo.connection')
     def test_fetch_added_student(self, mock_conn_students):
