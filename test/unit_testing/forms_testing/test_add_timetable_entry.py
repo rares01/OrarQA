@@ -125,7 +125,7 @@ def get_teacher_id_side_effect(full_name):
 
 class TestAddTimetableEntryForm(unittest.TestCase):
     def setUp(self):
-        # Create a root window for testing
+        # Create a root window for test
         self.root = tk.Tk()
 
     @patch('repositories.scheduler_entry_repo.connection')

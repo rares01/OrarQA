@@ -8,7 +8,7 @@ from ui.admin.views.teachers_view import TeachersView, AddTeacherForm
 
 class TestAddTeacherForm(unittest.TestCase):
     def setUp(self):
-        # Create a root window for testing
+        # Create a root window for test
         self.root = tk.Tk()
 
     @patch('repositories.teacher_repo.connection')
