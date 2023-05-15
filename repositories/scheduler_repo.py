@@ -13,4 +13,4 @@ def add_entry(id):
     conn.close()
 
 
-add_entry(1)
+# add_entry(1)

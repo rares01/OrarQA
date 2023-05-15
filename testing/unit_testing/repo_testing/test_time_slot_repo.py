@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch, MagicMock
 
 from repositories.time_slot_repo import get_time_slot_values, get_id_by_value, get_timeslot_by_id
 
@@ -13,21 +14,53 @@ class TimeSlotRepoTesting(unittest.TestCase):
         self.mock_end_hour = 10
         self.mock_wrong_end_hour = 24
 
-    def test_given_time_slot_repo_when_get_time_slot_values_then_returns_time_slots(self):
+
+    @patch('repositories.time_slot_repo.connection')
+    def test_given_teacher_repo_when_get_time_slot_values_then_returns_values(self, mock_conn):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [(1, '09:00', '10:30'), (2, '11:00', '12:30')]
+        mock_conn.return_value.cursor.return_value = mock_cursor
+
+        expected_result = ['09:00-10:30', '11:00-12:30']
         result = get_time_slot_values()
-        self.assertEqual(result, self.time_slots)
 
-    def test_given_get_id_by_value_when_time_slot_is_correct_then_returns_time_slot_id(self):
-        result = get_id_by_value(self.mock_start_hour, self.mock_end_hour)
-        self.assertEqual(result, self.mock_id)
+        self.assertEqual(result, expected_result)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT * FROM timeslot")
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()
 
-    def test_given_get_id_by_value_when_time_slot_is_wrong_then_throws_error(self):
-        self.assertRaises(IndexError, get_id_by_value(self.mock_start_hour, self.mock_wrong_end_hour))
+    @patch('repositories.time_slot_repo.connection')
+    def test_get_id_by_value(self, mock_conn):
+        # Arrange
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.cursor.return_value = mock_cursor
 
-    def test_given_get_name_by_id_when_time_slot_is_correct_then_returns_time_slot(self):
-        result = get_timeslot_by_id(self.mock_id)
-        self.assertEqual(result, self.mock_time_slot)
+        # Act
+        result = get_id_by_value("09:00", "10:00")
 
-    def test_given_get_name_by_id_when_time_slot_is_wrong_then_throws_error(self):
-        self.assertRaises(IndexError, get_timeslot_by_id(self.mock_wrong_id))
+        # Assert
+        self.assertEqual(result, 1)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with(
+            "SELECT id FROM timeslot WHERE start_hour=%s AND end_hour=%s",
+            ("09:00", "10:00")
+        )
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()
 
+    @patch('repositories.time_slot_repo.connection')
+    def test_given_timeslot_repo_when_get_timeslot_by_id_with_valid_input_then_returns_timeslot(self, mock_conn):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchall.return_value = [(1, "09:00", "10:00")]
+        mock_conn.return_value.cursor.return_value = mock_cursor
+
+        expected_result = "09:00:00-10:00:00"
+        result = get_timeslot_by_id(1)
+
+        self.assertEqual(result, expected_result)
+        mock_conn.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT * FROM timeslot WHERE id=%s", (1,))
+        mock_cursor.fetchall.assert_called_once()
+        mock_cursor.close.assert_called_once()
