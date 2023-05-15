@@ -1,8 +1,3 @@
-from entities.study_year import StudyYear
-from entities.time_slot import TimeSlot
-from entities.weekday import Weekday
-
-
 class SchedulerEntry:
     def __init__(self, id: int, weekday: str, time_slot: str, teacher: str, discipline: str,
                  study_year: int, semi_year: str, student_group: int, scheduler_id: int):
