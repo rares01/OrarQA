@@ -15,8 +15,17 @@ def handle(first_name_entry=None, last_name_entry=None, study_year_var=None, sem
     study_year = study_year_var.get()
     semi_year = semi_year_var.get()
     student_group = student_group_var.get()
+
+    assert first_name.isupper() and first_name.isalpha(), "First name should start with a capital letter " \
+                                                          "and contain only letters "
+    assert last_name.isupper() and last_name.isalpha(), "Last name should start with a capital letter " \
+                                                        "and contain only letters "
+    assert study_year.isnumeric(), "Study year should be a number"
+    assert semi_year.isalpha(), "Semi year should be a letter"
+    assert student_group.isnumeric(), "Student group should be a number"
     add_student(first_name=first_name, last_name=last_name, study_year=study_year, semi_year=semi_year,
                 student_group=student_group)
+    assert any(student.first_name == first_name for student in get_students())
 
 
 class AddStudentForm(tk.Frame):

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.views.teachers_view as view
-from repositories.teacher_repo import add_teacher
+from repositories.teacher_repo import add_teacher, get_teachers
 
 
 class AddTeacherForm(tk.Frame):
@@ -14,7 +14,12 @@ class AddTeacherForm(tk.Frame):
     def handle(self, first_name_entry=None, last_name_entry=None):
         first_name = first_name_entry.get()
         last_name = last_name_entry.get()
+        assert first_name.isupper() and first_name.isalpha(), "First name should start with a capital letter " \
+                                                              "and contain only letters "
+        assert last_name.isupper() and last_name.isalpha(), "Last name should start with a capital letter " \
+                                                            "and contain only letters "
         add_teacher(first_name=first_name, last_name=last_name)
+        assert any(teacher.first_name == first_name for teacher in get_teachers())
 
     def display(self):
         title_label = ttk.Label(self, text="Add Discipline Form", font=("Helvetica", 20))

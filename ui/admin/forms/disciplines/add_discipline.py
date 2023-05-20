@@ -21,7 +21,13 @@ class AddDisciplineForm(tk.Frame):
         name = name_entry.get()
         year = year_entry.get()
         teacher = teacher_entry.get()
+        assert year.isnumeric(), "Study year should be a number"
+        assert teacher.split()[0].issuper() and teacher.split()[0].isalpha() and teacher.split()[1].issuper() and \
+               teacher.split()[1].isalpha(), "First name and Last name of a teacher " \
+                                             "should be with capitals and separated " \
+                                             "with a space "
         add_discipline(name=name, year=year, teacher=teacher)
+        assert any(discipline.name == name for discipline in get_disciplines())
 
     def display(self):
         title_label = ttk.Label(self, text="Add Discipline Form", font=("Helvetica", 20))

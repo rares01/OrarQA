@@ -2,11 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.views.timetable_view as view
-from repositories.discipline_repo import get_disciplines, get_disciplines_value
+from repositories.discipline_repo import get_disciplines_value
 from repositories.scheduler_entry_repo import add_entry, get_entries
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
-from repositories.student_repo import add_student, get_students
 from repositories.study_year_repo import get_study_years_values
 from repositories.teacher_repo import get_teacher_full_names
 from repositories.time_slot_repo import get_time_slot_values
@@ -25,8 +24,18 @@ def handle(weekday_entry=None, time_slot_entry=None, teacher_entry=None, discipl
     study_year = study_year_entry.get()
     semi_year = semi_year_entry.get()
     student_group = student_group_entry.get()
+    assert any(day == weekday for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]), "No valid weekday"
+    assert study_year.isnumeric(), "Study year should be a number"
+    assert semi_year.isalpha(), "Semi year should be a letter"
+    assert student_group.isnumeric(), "Student group should be a number"
+    assert int(end_hour) - int(start_hour) == 2, "Course duration is 2 hours!"
+    assert teacher.split()[0].issuper() and teacher.split()[0].isalpha() and teacher.split()[1].issuper() and \
+           teacher.split()[1].isalpha(), "First name and Last name of a teacher " \
+                                         "should be with capitals and separated " \
+                                         "with a space "
     add_entry(weekday=weekday, start_hour=start_hour, end_hour=end_hour, teacher=teacher, discipline=discipline,
               study_year=study_year, semi_year=semi_year, student_group=student_group, scheduler_id=1)
+    assert any(entry.weekday == weekday and entry.discipline == discipline for entry in get_entries())
 
 
 class AddTimetableEntryForm(tk.Frame):
@@ -99,9 +108,9 @@ class AddTimetableEntryForm(tk.Frame):
         student_group_label.pack()
         student_group_dropdown.pack()
         add_timetable_entry_button = ttk.Button(self, text="Add Entry",
-                                        command=lambda: handle(weekday_var, time_slot_var, teacher_var,
-                                                               discipline_var, study_year_var, semi_year_var,
-                                                               student_group_var))
+                                                command=lambda: handle(weekday_var, time_slot_var, teacher_var,
+                                                                       discipline_var, study_year_var, semi_year_var,
+                                                                       student_group_var))
         add_timetable_entry_button.pack()
 
         self.back_button = ttk.Button(self, text="Back", command=self.go_back, style="TButton")
