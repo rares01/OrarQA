@@ -10,6 +10,7 @@ from repositories.study_year_repo import get_value_by_id as get_value_study_year
 
 def get_students():
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM student")
@@ -17,6 +18,7 @@ def get_students():
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
     students = []
     for row in rows:
@@ -31,6 +33,7 @@ def get_students():
 
 def add_student(first_name, last_name, study_year, semi_year, student_group):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     study_year_id = get_id_study_year(study_year)
@@ -47,10 +50,12 @@ def add_student(first_name, last_name, study_year, semi_year, student_group):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
 
 def delete_student(id):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute(
@@ -61,3 +66,4 @@ def delete_student(id):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"

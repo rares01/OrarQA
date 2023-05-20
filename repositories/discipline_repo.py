@@ -6,6 +6,7 @@ from repositories.teacher_repo import get_teacher_full_name_by_id, get_teacher_i
 
 def get_disciplines():
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM discipline")
@@ -13,7 +14,7 @@ def get_disciplines():
 
     cur.close()
     conn.close()
-
+    assert conn.closed() == 1, "Connection is not closed"
     disciplines = []
     for row in rows:
         discipline = Discipline(*row)
@@ -26,6 +27,7 @@ def get_disciplines():
 
 def get_disciplines_value():
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM discipline")
@@ -33,7 +35,7 @@ def get_disciplines_value():
 
     cur.close()
     conn.close()
-
+    assert conn.closed() == 1, "Connection is not closed"
     disciplines = [row[1] for row in rows]
 
     return disciplines
@@ -41,6 +43,7 @@ def get_disciplines_value():
 
 def add_discipline(name, year, teacher):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     year_id = get_id_by_value(year)
@@ -55,10 +58,12 @@ def add_discipline(name, year, teacher):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
 
 def delete_discipline(id):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute(
@@ -69,10 +74,12 @@ def delete_discipline(id):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
 
 def get_discipline_id_by_value(name):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute("SELECT id FROM discipline WHERE name=%s", (name,))
@@ -80,12 +87,14 @@ def get_discipline_id_by_value(name):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 
 
 def get_discipline_by_id(id):
     conn = connection()
+    assert conn is not None, "Connection unstable"
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM discipline WHERE id=%s", (id,))
@@ -93,5 +102,6 @@ def get_discipline_by_id(id):
 
     cur.close()
     conn.close()
+    assert conn.closed() == 1, "Connection is not closed"
 
     return [row[1] for row in rows][0]
