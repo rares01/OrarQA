@@ -22,6 +22,9 @@ class DisciplinesView(tk.Frame):
         self.display()
 
     def display(self):
+        assert callable(get_disciplines), "get_disciplines() function should be defined"
+        assert callable(get_study_years_values), "get_study_years_values() function should be defined"
+        assert callable(get_teacher_full_names), "get_teacher_full_names() function should be defined"
         self.disciplines = get_disciplines()
 
         title_label = ttk.Label(self, text="Disciplines View", font=("Helvetica", 20))
@@ -75,10 +78,26 @@ class DisciplinesView(tk.Frame):
         self.teachers_filter.current(0)
         self.teachers_filter.pack(side="left", padx=5)
 
+        assert self.disciplines is not None, "self.disciplines should not be None"
+        assert isinstance(title_label, ttk.Label), "title_label should be an instance of ttk.Label"
+        assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
+        assert isinstance(style, ttk.Style), "style should be an instance of ttk.Style"
+        assert isinstance(self.add_button, ttk.Button), "self.add_button should be an instance of ttk.Button"
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button should be an instance of ttk.Button"
+        assert isinstance(self.back_button, ttk.Button), "self.back_button should be an instance of ttk.Button"
+        assert isinstance(self.study_year_filter,
+                          ttk.Combobox), "self.study_year_filter should be an instance of ttk.Combobox"
+        assert isinstance(self.teachers_filter,
+                          ttk.Combobox), "self.teachers_filter should be an instance of ttk.Combobox"
+
     def set_disciplines(self, current_disciplines):
+        assert isinstance(current_disciplines, list), "current_disciplines should be a list"
+
         self.disciplines = current_disciplines
 
-    def on_tree_select(self, event):
+        assert self.disciplines == current_disciplines, "self.disciplines should be set to current_disciplines"
+
+    def on_tree_select(self, event=None):
         selection = self.tree.selection()
         if selection:
             self.delete_button.config(state="enabled")
@@ -86,6 +105,11 @@ class DisciplinesView(tk.Frame):
             self.delete_button.config(state="disabled")
 
     def apply_filters(self):
+        assert isinstance(self.study_year_filter,
+                          ttk.Combobox), "self.study_year_filter should be an instance of ttk.Combobox"
+        assert isinstance(self.teachers_filter,
+                          ttk.Combobox), "self.teachers_filter should be an instance of ttk.Combobox"
+
         year = self.study_year_filter.get()
         teacher = self.teachers_filter.get()
 
@@ -101,17 +125,39 @@ class DisciplinesView(tk.Frame):
 
         self.update_treeview(filtered_disciplined)
 
+        assert isinstance(year, str), "year should be a string"
+        assert isinstance(teacher, str), "teacher should be a string"
+
     def update_treeview(self, filtered_disciplines):
+        assert isinstance(filtered_disciplines, list), "filtered_disciplines should be a list"
+
         self.tree.delete(*self.tree.get_children())
         for discipline in filtered_disciplines:
             self.tree.insert("", "end", values=(
                 discipline.id, discipline.name, discipline.study_year, discipline.teacher_full_name))
 
+        children = self.tree.get_children()
+        assert len(children) == len(
+            filtered_disciplines), "Number of treeview items should match the number of filtered disciplines"
+
+        for i, discipline in enumerate(filtered_disciplines):
+            item_values = self.tree.item(children[i])["values"]
+            assert item_values == (discipline.id, discipline.name, discipline.study_year,
+                                   discipline.teacher_full_name), "Mismatch in treeview item values"
+
     def add_discipline(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(AddDisciplineForm)
 
+        assert self.master.current_frame == AddDisciplineForm, "Expected current_frame to be set to AddDisciplineForm"
+
     def go_back(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(admin.AdminPage)
+
+        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
 
     def delete_discipline(self):
         selection = self.tree.selection()
