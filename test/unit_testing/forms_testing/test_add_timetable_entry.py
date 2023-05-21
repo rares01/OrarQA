@@ -1,6 +1,6 @@
 import tkinter as tk
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, call
 
 from ui.admin.forms.timetable.add_timetable_entry import handle
 
@@ -125,7 +125,6 @@ def get_teacher_id_side_effect(full_name):
 
 class TestAddTimetableEntryForm(unittest.TestCase):
     def setUp(self):
-        # Create a root window for test
         self.root = tk.Tk()
 
     @patch('repositories.scheduler_entry_repo.connection')
@@ -145,19 +144,17 @@ class TestAddTimetableEntryForm(unittest.TestCase):
                     mock_time_slot_method,
                     mock_weekday_method,
                     mock_conn):
-        weekday = "Monday"
+        weekday = "Friday"
         time_slot = "8:00-10:00"
         teacher = "John Smith"
-        discipline = "SD"
+        discipline = "IP"
         study_year = "1"
         semi_year = "A"
         student_group = "101"
 
         mock_cursor = MagicMock()
-        entries = [
-            [8, "Monday", 8, 10, "John Smith", "SD", 1, "A", 101, 1]
-        ]
-        mock_cursor.fetchall.return_value = entries
+        mock_cursor.fetchall.return_value = [(8, "Friday", 8, 10, "John Smith", "IP", 1, "A", 101, 1)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect
         mock_study_year_method.side_effect = study_year_method_side_effect
@@ -177,15 +174,19 @@ class TestAddTimetableEntryForm(unittest.TestCase):
         mock_cursor_teachers = MagicMock()
         mock_cursor_teachers.fetchall.return_value = teachers
         mock_teacher_connection.return_value.cursor.return_value = mock_cursor_teachers
+        mock_teacher_connection.return_value.closed = 1
 
-        # Call the handle method
         handle(weekday_entry=tk.StringVar(value=weekday), time_slot_entry=tk.StringVar(value=time_slot),
                teacher_entry=tk.StringVar(value=teacher), discipline_entry=tk.StringVar(value=discipline),
                study_year_entry=tk.StringVar(value=study_year), semi_year_entry=tk.StringVar(value=semi_year),
                student_group_entry=tk.StringVar(value=student_group))
 
-        mock_cursor.execute.assert_called_once_with(
-            "INSERT INTO schedulerentry (weekday_id, time_slot_id, teacher_id, discipline_id, study_year_id,"
-            " semi_year_id, student_group_id, scheduler_id) VALUES (%s, %s, "
-            "%s, %s, %s, %s, %s, %s)",
-            (1, 1, 1, 1, 1, 1, 1, 1))
+        expected_calls = [
+            call('INSERT INTO schedulerentry (weekday_id, time_slot_id, teacher_id, discipline_id, study_year_id, '
+                 'semi_year_id, student_group_id, scheduler_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (5, 1, 1,
+                                                                                                           2, 1, 1,
+                                                                                                           1, 1)),
+            call('SELECT * FROM schedulerentry')
+        ]
+
+        mock_cursor.execute.assert_has_calls(expected_calls)

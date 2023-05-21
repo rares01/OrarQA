@@ -1,6 +1,6 @@
 import tkinter as tk
 import unittest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, call
 
 import ui.admin.views.students_view as view
 from ui.admin.forms.students.add_students import handle
@@ -12,10 +12,10 @@ class TestAddStudentForm(unittest.TestCase):
 
     @patch('repositories.student_repo.connection')
     def test_handle(self, mock_conn_students):
-        form = view.AddStudentForm(self.root)
+        view.AddStudentForm(self.root)
 
-        first_name = "John"
-        last_name = "Doe"
+        first_name = "Alice"
+        last_name = "Smith"
         year = 1
         semi_year = "A"
         student_group = 101
@@ -30,15 +30,21 @@ class TestAddStudentForm(unittest.TestCase):
         mock_cursor_students = MagicMock()
         mock_cursor_students.fetchall.return_value = students
         mock_conn_students.return_value.cursor.return_value = mock_cursor_students
+        mock_conn_students.return_value.closed = 1
 
         handle(first_name_entry=tk.StringVar(value=first_name), last_name_entry=tk.StringVar(value=last_name),
                study_year_var=tk.StringVar(value=year), semi_year_var=tk.StringVar(value=semi_year),
                student_group_var=tk.StringVar(value=str(student_group)))
 
-        mock_cursor_students.execute.assert_called_once_with(
-            "INSERT INTO student (first_name, last_name, study_year_id, semi_year_id, student_group_id) VALUES (%s, "
-            "%s, %s, %s, %s)",
-            ('John', 'Doe', "1", "1", "1"))
+        expected_calls = [
+            call(
+                'INSERT INTO student (first_name, last_name, study_year_id, semi_year_id, student_group_id) VALUES ('
+                '%s, %s, %s, %s, %s)',
+                ('Alice', 'Smith', '1', '1', '1')),
+            call('SELECT * FROM student')
+        ]
+
+        mock_cursor_students.execute.assert_has_calls(expected_calls)
 
     @patch('repositories.student_repo.connection')
     def test_fetch_added_student(self, mock_conn_students):
@@ -57,6 +63,7 @@ class TestAddStudentForm(unittest.TestCase):
         mock_cursor_students = MagicMock()
         mock_cursor_students.fetchall.return_value = expected_students
         mock_conn_students.return_value.cursor.return_value = mock_cursor_students
+        mock_conn_students.return_value.closed = 1
         form.students_view = view.StudentsView(self.root)
         form.students_view.set_students(expected_students)
 

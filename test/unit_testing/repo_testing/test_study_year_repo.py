@@ -12,6 +12,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_study_year_repo_when_get_study_year_values_then_returns_study_year_numbers(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,), (2,), (3,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_study_years_values()
@@ -26,6 +27,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_study_year_repo_when_get_id_by_value_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_id_by_value(1)
@@ -40,6 +42,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_study_year_repo_when_get_value_by_id_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_value_by_id(1)

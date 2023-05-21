@@ -146,6 +146,7 @@ class TestTimetableView(unittest.TestCase):
         entries = [
             [1, 'Friday', '10 12', 'Alice Smith', 'IP', 1, 'B', 102]
         ]
+        mock_conn.return_value.closed = 1
         mock_cursor.fetchall.return_value = entries
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect
@@ -162,9 +163,6 @@ class TestTimetableView(unittest.TestCase):
             item_values = self.view.tree.item(tree_items[i])['values']
             self.assertEqual(list(item_values), list(entry))
 
-        # Assert that the UI elements are initialized correctly
-
-        # Check the existence of UI elements
         self.assertIsInstance(self.view.tree, ttk.Treeview)
         self.assertIsInstance(self.view.add_button, ttk.Button)
         self.assertIsInstance(self.view.back_button, ttk.Button)

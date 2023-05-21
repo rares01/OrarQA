@@ -16,10 +16,10 @@ def handle(first_name_entry=None, last_name_entry=None, study_year_var=None, sem
     semi_year = semi_year_var.get()
     student_group = student_group_var.get()
 
-    assert first_name.isupper() and first_name.isalpha(), "First name should start with a capital letter " \
-                                                          "and contain only letters "
-    assert last_name.isupper() and last_name.isalpha(), "Last name should start with a capital letter " \
-                                                        "and contain only letters "
+    assert first_name[0].isupper() and first_name.isalpha(), "First name should start with a capital letter " \
+                                                             "and contain only letters "
+    assert last_name[0].isupper() and last_name.isalpha(), "Last name should start with a capital letter " \
+                                                           "and contain only letters "
     assert study_year.isnumeric(), "Study year should be a number"
     assert semi_year.isalpha(), "Semi year should be a letter"
     assert student_group.isnumeric(), "Student group should be a number"

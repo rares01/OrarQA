@@ -11,6 +11,7 @@ class TestTimeslotRepo(TestCase):
     def test_get_student_groups(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, 1), (2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_student_groups()
@@ -34,6 +35,7 @@ class TestTimeslotRepo(TestCase):
         # Arrange
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,), (2,), (3,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = [1, 2, 3]
@@ -52,6 +54,7 @@ class TestTimeslotRepo(TestCase):
     def test_given_student_group_repo_when_get_id_by_value_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "1")]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = 1
@@ -67,6 +70,7 @@ class TestTimeslotRepo(TestCase):
     def test_given_student_group_repo_when_get_value_by_id_with_valid_input_then_returns_number(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("1",)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = "1"

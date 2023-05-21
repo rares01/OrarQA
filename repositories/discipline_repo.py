@@ -14,7 +14,7 @@ def get_disciplines():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
     disciplines = []
     for row in rows:
         discipline = Discipline(*row)
@@ -35,7 +35,7 @@ def get_disciplines_value():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
     disciplines = [row[1] for row in rows]
 
     return disciplines
@@ -58,7 +58,7 @@ def add_discipline(name, year, teacher):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 def delete_discipline(id):
@@ -74,7 +74,7 @@ def delete_discipline(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 def get_discipline_id_by_value(name):
@@ -87,7 +87,7 @@ def get_discipline_id_by_value(name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 
@@ -102,6 +102,6 @@ def get_discipline_by_id(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[1] for row in rows][0]

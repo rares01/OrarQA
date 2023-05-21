@@ -36,7 +36,7 @@ def add_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, se
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 def get_entry_by_id(entry_id):
@@ -50,7 +50,7 @@ def get_entry_by_id(entry_id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 
@@ -82,7 +82,7 @@ def get_entries():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return fetch_rows(rows)
 
@@ -119,6 +119,6 @@ def get_entries_with_entity():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return fetch_rows_with_entity(rows)

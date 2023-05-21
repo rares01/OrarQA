@@ -11,7 +11,7 @@ def get_study_years_values():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows]
 
@@ -26,7 +26,7 @@ def get_id_by_value(number):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 
@@ -41,6 +41,6 @@ def get_value_by_id(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]

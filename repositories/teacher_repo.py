@@ -27,7 +27,7 @@ def get_teacher_full_names():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
@@ -47,7 +47,7 @@ def get_teacher_id_by_full_name(full_name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 
@@ -62,7 +62,7 @@ def get_teachers():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
@@ -82,7 +82,7 @@ def get_full_teachers():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
@@ -106,4 +106,4 @@ def add_teacher(first_name, last_name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"

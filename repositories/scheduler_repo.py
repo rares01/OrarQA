@@ -12,7 +12,7 @@ def add_entry(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 # add_entry(1)

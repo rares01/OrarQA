@@ -22,6 +22,7 @@ class RoomTesting(unittest.TestCase):
     def test_given_room_repo_when_get_room_values_then_returns_correctly(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("A101", "Course"), ("B203", "Laboratory")]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_room_values()
@@ -39,6 +40,7 @@ class RoomTesting(unittest.TestCase):
     def test_given_room_repo_when_get_rooms_by_room_type_then_returns_correctly(self, mock_room_type_method, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("A101", "Course")]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_room_type_method.side_effect = room_type_method_side_effect
 
@@ -66,6 +68,7 @@ class RoomTesting(unittest.TestCase):
     def test_given_room_repo_when_get_id_by_value_then_returns_correctly(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_id_by_value("A101")
@@ -80,6 +83,7 @@ class RoomTesting(unittest.TestCase):
     def test_given_room_repo_when_get_value_by_id_then_returns_correctly(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("A101",)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_value_by_id(1)

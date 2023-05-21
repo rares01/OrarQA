@@ -11,6 +11,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_get_teacher_full_name_by_id_then_returns_full_name(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [('John', 'Smau')]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_teacher_full_name_by_id(1)
@@ -26,6 +27,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_get_teacher_full_names_then_returns_teacher_full_names(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [('John', 'Doe'), ('Jane', 'Doe')]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_teacher_full_names()
@@ -40,6 +42,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_get_teacher_id_by_full_name_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = 1
@@ -56,6 +59,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_add_teacher_with_valid_input_then_adds_teacher(self, mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
 
         first_name = "John"
         last_name = "Smau"
@@ -72,6 +76,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_get_full_teachers_then_returns_list_of_teacher_objects(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, 'John', 'Doe'), (2, 'Jane', 'Doe')]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         teachers = get_full_teachers()
@@ -96,6 +101,7 @@ class TestTeacherRepo(unittest.TestCase):
     def test_given_teacher_repo_when_get_teachers_with_valid_input_then_returns_teachers(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, 'John', 'Doe'), (2, 'Jane', 'Doe')]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         teachers = get_teachers()

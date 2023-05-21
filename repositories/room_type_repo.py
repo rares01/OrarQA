@@ -11,7 +11,7 @@ def get_room_type_values():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows]
 
@@ -25,7 +25,7 @@ def get_id_by_value(name):
     rows = cur.fetchall()
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     return [row[0] for row in rows][0]
 

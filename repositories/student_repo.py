@@ -18,7 +18,7 @@ def get_students():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     students = []
     for row in rows:
@@ -50,7 +50,7 @@ def add_student(first_name, last_name, study_year, semi_year, student_group):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 def delete_student(id):
@@ -66,4 +66,4 @@ def delete_student(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
