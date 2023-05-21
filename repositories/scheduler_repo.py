@@ -2,6 +2,7 @@ from dbcontext import connection
 
 
 def add_entry(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -13,6 +14,3 @@ def add_entry(id):
     cur.close()
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
-
-
-# add_entry(1)

@@ -1,10 +1,10 @@
 from dbcontext import connection
 from entities.student import Student
 from repositories.semi_year_repo import get_id_by_value as get_id_semi_year
-from repositories.student_group_repo import get_id_by_value as get_id_student_group
-from repositories.study_year_repo import get_id_by_value as get_id_study_year
 from repositories.semi_year_repo import get_value_by_id as get_value_semi_year
+from repositories.student_group_repo import get_id_by_value as get_id_student_group
 from repositories.student_group_repo import get_value_by_id as get_value_student_group
+from repositories.study_year_repo import get_id_by_value as get_id_study_year
 from repositories.study_year_repo import get_value_by_id as get_value_study_year
 
 
@@ -28,10 +28,18 @@ def get_students():
         student.student_group = get_value_student_group(row[5])
         students.append(student)
 
+    assert all(
+        entry.id is not None and entry.first_name is not None and entry.last_name is not None and entry.student_group is
+        not None and entry.semi_year is not None and entry.study_year is not None for entry in students)
     return students
 
 
 def add_student(first_name, last_name, study_year, semi_year, student_group):
+    assert first_name is not None
+    assert last_name is not None
+    assert student_group is not None
+    assert semi_year is not None
+    assert study_year is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -54,6 +62,7 @@ def add_student(first_name, last_name, study_year, semi_year, student_group):
 
 
 def delete_student(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()

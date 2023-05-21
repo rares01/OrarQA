@@ -22,6 +22,9 @@ def get_disciplines():
         discipline.study_year = get_value_by_id(row[2])
         disciplines.append(discipline)
 
+    assert all(
+        entry.teacher_full_name is not None and entry.id is not None and entry.study_year is not None and entry.name for
+        entry in disciplines)
     return disciplines
 
 
@@ -37,11 +40,16 @@ def get_disciplines_value():
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
     disciplines = [row[1] for row in rows]
+    assert all(
+        entry is not None for entry in disciplines)
 
     return disciplines
 
 
 def add_discipline(name, year, teacher):
+    assert name is not None
+    assert year is not None
+    assert teacher is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -62,6 +70,7 @@ def add_discipline(name, year, teacher):
 
 
 def delete_discipline(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -78,6 +87,7 @@ def delete_discipline(id):
 
 
 def get_discipline_id_by_value(name):
+    assert name is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -89,10 +99,13 @@ def get_discipline_id_by_value(name):
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result
 
 
 def get_discipline_by_id(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -104,4 +117,6 @@ def get_discipline_by_id(id):
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
 
-    return [row[1] for row in rows][0]
+    result = [row[1] for row in rows][0]
+    assert result is not None
+    return result

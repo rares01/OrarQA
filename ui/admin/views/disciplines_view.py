@@ -118,4 +118,5 @@ class DisciplinesView(tk.Frame):
         if selection:
             values = self.tree.item(selection)["values"]
             delete_discipline(values[0])
+            assert all(discipline.id is not values[0] for discipline in get_disciplines())
         self.update_treeview(get_disciplines())

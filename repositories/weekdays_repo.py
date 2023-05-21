@@ -13,10 +13,13 @@ def get_weekdays_values():
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows]
+    result = [row[0] for row in rows]
+    assert all(entry is not None for entry in result)
+    return result
 
 
 def get_id_by_value(name):
+    assert name is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -28,7 +31,9 @@ def get_id_by_value(name):
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result
 
 
 def get_name_by_id(id):
@@ -42,4 +47,6 @@ def get_name_by_id(id):
     conn.close()
     assert conn.closed == 1, "Connection is not closed"
 
-    return [row[1] for row in rows][0]
+    result = [row[1] for row in rows][0]
+    assert result is not None
+    return result
