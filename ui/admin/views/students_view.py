@@ -95,7 +95,11 @@ class StudentsView(tk.Frame):
         self.group_filter.pack(side="left", padx=5)
 
     def set_students(self, current_students):
+        assert isinstance(current_students, list), "current_students should be a list"
+
         self.students = current_students
+
+        assert self.students == current_students, "self.students should be set to the current students"
 
     def on_tree_select(self, event):
         selection = self.tree.selection()
@@ -124,11 +128,15 @@ class StudentsView(tk.Frame):
         self.update_treeview(filtered_students)
 
     def update_treeview(self, filtered_students):
+        assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
+        assert isinstance(filtered_students, list), "filtered_students should be a list"
+
         self.tree.delete(*self.tree.get_children())
         for student in filtered_students:
             self.tree.insert("", "end", values=(
                 student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
                 student.student_group))
+
 
     def add_student(self):
         self.master.switch_frame(AddStudentForm)
