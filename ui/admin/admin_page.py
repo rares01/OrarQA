@@ -48,7 +48,6 @@ class AdminPage(tk.Frame):
         assert isinstance(self.style, ttk.Style), "style should be an instance of ttk.Style"
         assert isinstance(self.back_button, ttk.Button), "self.back_button should be an instance of ttk.Button"
 
-
     def redirect_to_views(self, entity_name):
         assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
 
