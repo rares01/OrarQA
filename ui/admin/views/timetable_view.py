@@ -3,6 +3,7 @@ import webbrowser
 from tkinter import ttk
 
 import ui.home.home_page as home
+from entities.scheduler_entry import SchedulerEntry
 from repositories.discipline_repo import get_disciplines_value
 from repositories.scheduler_entry_repo import get_entries, get_entries_with_entity
 from repositories.semi_year_repo import get_semi_years_values
@@ -59,12 +60,12 @@ class TimetableView(tk.Frame):
         self.display()
 
     def display(self):
+        assert callable(get_entries), "get_entries must be a callable function."
 
         self.timetable_entries = get_entries()
 
         title_label = ttk.Label(self, text="Timetable View", font=("Helvetica", 12))
         title_label.pack(pady=6)
-
         self.tree = ttk.Treeview(self, columns=(
             "ID", "Weekday", "Time Slot", "Teacher", "Discipline", "Study Year", "Semi Year", "Student "
                                                                                               "Group"),
@@ -169,17 +170,54 @@ class TimetableView(tk.Frame):
         self.group_filter.current(0)
         self.group_filter.pack(side="top", padx=5)
 
+        assert isinstance(self.timetable_entries, list), "self.timetable_entries must be a list."
+        assert isinstance(self.tree, ttk.Treeview), "self.tree must be a valid ttk.Treeview object."
+        assert isinstance(self.add_button, ttk.Button), "self.add_button must be a valid ttk.Button object."
+        assert isinstance(self.back_button, ttk.Button), "self.back_button must be a valid ttk.Button object."
+        assert isinstance(self.generate_html, ttk.Button), "self.generate_html must be a valid ttk.Button object."
+        assert isinstance(self.weekday_filter, ttk.Combobox), "self.weekday_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.time_slot_filter,
+                          ttk.Combobox), "self.time_slot_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.teacher_filter, ttk.Combobox), "self.teacher_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.discipline_filter,
+                          ttk.Combobox), "self.discipline_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.study_year_filter,
+                          ttk.Combobox), "self.study_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.semi_year_filter,
+                          ttk.Combobox), "self.semi_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.group_filter, ttk.Combobox), "self.group_filter must be a valid ttk.Combobox object."
+
     def set_timetable_entries(self, current_timetable_entries):
+        assert isinstance(current_timetable_entries, list), "current_timetable_entries must be a list"
+
         self.timetable_entries = current_timetable_entries
 
+        assert self.timetable_entries == current_timetable_entries,\
+            "self.timetable_entries should be set to the current timetable_entries"
+
     def on_tree_select(self, event):
+        assert event is not None, "Event parameter is missing"
+        assert isinstance(self.tree, ttk.Treeview), "Invalid tree attribute"
+        assert isinstance(self.delete_button, ttk.Button), "Invalid delete_button attribute"
+
         selection = self.tree.selection()
         if selection:
             self.delete_button.config(state="enabled")
         else:
             self.delete_button.config(state="disabled")
 
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
+
     def apply_filters(self):
+        assert isinstance(self.weekday_filter, ttk.Combobox), "Invalid weekday_filter attribute"
+        assert isinstance(self.time_slot_filter, ttk.Combobox), "Invalid time_slot_filter attribute"
+        assert isinstance(self.teacher_filter, ttk.Combobox), "Invalid teacher_filter attribute"
+        assert isinstance(self.discipline_filter, ttk.Combobox), "Invalid discipline_filter attribute"
+        assert isinstance(self.study_year_filter, ttk.Combobox), "Invalid study_year_filter attribute"
+        assert isinstance(self.semi_year_filter, ttk.Combobox), "Invalid semi_year_filter attribute"
+        assert isinstance(self.group_filter, ttk.Combobox), "Invalid group_filter attribute"
+        assert isinstance(self.timetable_entries, list), "Invalid timetable_entries attribute"
+
         weekday = self.weekday_filter.get()
         time_slot = self.time_slot_filter.get()
         teacher = self.teacher_filter.get()
@@ -210,14 +248,38 @@ class TimetableView(tk.Frame):
 
         self.update_treeview(filtered_entries)
 
+        assert isinstance(filtered_entries, list), "filtered_entries must be a list."
+        assert all(isinstance(entry, SchedulerEntry) for entry in
+                   filtered_entries), "All items in filtered_entries must be instances of SchedulerEntry class."
+
     def update_treeview(self, filtered_entries):
+        assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
+        assert isinstance(filtered_entries, list), "filtered_entries should be a list"
+
         self.tree.delete(*self.tree.get_children())
         for entry in filtered_entries:
             self.tree.insert("", "end", values=(
                 entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
+        children = self.tree.get_children()
+        assert len(children) == len(
+            filtered_entries), "Number of treeview items should match the number of filtered entries"
+
+        for i, entry in enumerate(filtered_entries):
+            item_values = self.tree.item(children[i])["values"]
+            assert item_values == (
+                entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6],
+                entry[7]), "Mismatch in treeview item values"
+
     def add_timetable_entry(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(AddTimetableEntryForm)
 
+        assert self.master.current_frame == AddTimetableEntryForm, "Expected current_frame to be set to AddTimetableEntryForm"
+
     def go_back(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(home.HomePage)
+        assert self.master.current_frame == home.HomePage, "Expected current_frame to be set to HomePage"

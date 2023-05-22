@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import ui.admin.admin_page as admin
+from entities.student import Student
 from repositories.semi_year_repo import get_semi_years_values
 from repositories.student_group_repo import get_student_groups_values
 from repositories.student_repo import get_students, delete_student
@@ -24,6 +25,8 @@ class StudentsView(tk.Frame):
         self.display()
 
     def display(self):
+        assert callable(get_students), "get_students must be a callable function."
+
         self.students = get_students()
 
         title_label = ttk.Label(self, text="Students View", font=("Helvetica", 20))
@@ -94,6 +97,19 @@ class StudentsView(tk.Frame):
         self.group_filter.current(0)
         self.group_filter.pack(side="left", padx=5)
 
+        assert isinstance(self.tree, ttk.Treeview), "self.tree must be a valid ttk.Treeview object."
+        assert isinstance(self.add_button, ttk.Button), "self.add_button must be a valid ttk.Button object."
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
+        assert isinstance(self.back_button, ttk.Button), "self.back_button must be a valid ttk.Button object."
+        assert callable(self.add_student), "self.add_student must be a callable function."
+        assert callable(self.delete_student), "self.delete_student must be a callable function."
+        assert callable(self.go_back), "self.go_back must be a callable function."
+        assert isinstance(self.study_year_filter,
+                          ttk.Combobox), "self.study_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.semi_year_filter,
+                          ttk.Combobox), "self.semi_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.group_filter, ttk.Combobox), "self.group_filter must be a valid ttk.Combobox object."
+
     def set_students(self, current_students):
         assert isinstance(current_students, list), "current_students should be a list"
 
@@ -102,13 +118,24 @@ class StudentsView(tk.Frame):
         assert self.students == current_students, "self.students should be set to the current students"
 
     def on_tree_select(self, event):
+        assert isinstance(self.tree, ttk.Treeview), "self.tree must be a valid ttk.Treeview object."
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
+
         selection = self.tree.selection()
         if selection:
             self.delete_button.config(state="enabled")
         else:
             self.delete_button.config(state="disabled")
 
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
+
     def apply_filters(self):
+        assert isinstance(self.study_year_filter,
+                          ttk.Combobox), "self.study_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.semi_year_filter,
+                          ttk.Combobox), "self.semi_year_filter must be a valid ttk.Combobox object."
+        assert isinstance(self.group_filter, ttk.Combobox), "self.group_filter must be a valid ttk.Combobox object."
+
         year = self.study_year_filter.get()
         semi_year = self.semi_year_filter.get()
         group = self.group_filter.get()
@@ -127,6 +154,10 @@ class StudentsView(tk.Frame):
 
         self.update_treeview(filtered_students)
 
+        assert isinstance(filtered_students, list), "filtered_students must be a list."
+        assert all(isinstance(student, Student) for student in
+                   filtered_students), "All items in filtered_students must be instances of Student class."
+
     def update_treeview(self, filtered_students):
         assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
         assert isinstance(filtered_students, list), "filtered_students should be a list"
@@ -137,12 +168,28 @@ class StudentsView(tk.Frame):
                 student.id, student.first_name, student.last_name, student.study_year, student.semi_year,
                 student.student_group))
 
+        children = self.tree.get_children()
+        assert len(children) == len(
+            filtered_students), "Number of treeview items should match the number of filtered disciplines"
+
+        for i, student in enumerate(filtered_students):
+            item_values = self.tree.item(children[i])["values"]
+            assert item_values == (student.id, student.first_name, student.study_year,
+                                   student.semi_year, student.student_group), "Mismatch in treeview item values"
 
     def add_student(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(AddStudentForm)
 
+        assert self.master.current_frame == AddStudentForm, "Expected current_frame to be set to AddStudentForm"
+
     def go_back(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(admin.AdminPage)
+
+        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
 
     def delete_student(self):
         selection = self.tree.selection()

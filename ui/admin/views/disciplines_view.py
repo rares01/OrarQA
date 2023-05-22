@@ -98,11 +98,17 @@ class DisciplinesView(tk.Frame):
         assert self.disciplines == current_disciplines, "self.disciplines should be set to current_disciplines"
 
     def on_tree_select(self, event=None):
+        assert isinstance(event, tk.Event) or event is None, "event must be a valid tk.Event object or None."
+        assert isinstance(self.tree, ttk.Treeview), "self.tree must be a valid ttk.Treeview object."
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
+
         selection = self.tree.selection()
         if selection:
             self.delete_button.config(state="enabled")
         else:
             self.delete_button.config(state="disabled")
+
+        assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
 
     def apply_filters(self):
         assert isinstance(self.study_year_filter,
