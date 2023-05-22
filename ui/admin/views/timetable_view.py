@@ -15,6 +15,8 @@ from ui.admin.forms.timetable.add_timetable_entry import *
 
 
 def go_to_html():
+    assert callable(get_entries_with_entity), "get_entries_with_entity() function should be defined"
+    assert callable(webbrowser.open), "webbrowser.open function should be defined"
     scheduler_entries = get_entries_with_entity()
     html = '<!DOCTYPE html>'
 
@@ -37,6 +39,8 @@ def go_to_html():
         f.write(html)
 
     webbrowser.open('my_html_file.html')
+
+    assert isinstance(html, str), "html should be a string"
 
 
 class TimetableView(tk.Frame):

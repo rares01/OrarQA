@@ -25,9 +25,23 @@ class HomePage(tk.Frame):
         self.timetable_button = ttk.Button(self, text="Timetable" , command=self.go_to_timetable, style="Custom.TButton")
         self.timetable_button.pack(side="top", pady=10)
 
+        assert isinstance(self.title_label, ttk.Label), "title_label should be an instance of ttk.Label"
+        assert isinstance(self.admin_button, ttk.Button), "self.admin_button should be an instance of ttk.Button"
+        assert isinstance(self.timetable_button, ttk.Button), "self.timetable_button should be an instance of " \
+                                                              "ttk.Button"
+
+
+
 
     def go_to_admin_page(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(admin.AdminPage)
+        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
+
 
     def go_to_timetable(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(timetable_page.TimeTablePage)
+        assert self.master.current_frame == timetable_page.TimeTablePage, "Expected current_frame to be set to TimeTablePage"

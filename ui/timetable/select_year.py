@@ -33,16 +33,34 @@ class SelectYear(tk.Frame):
                     groups_label = ttk.Button(self, text=group, command=self.go_to_timetable, style="TLabel")
                     groups_label.pack(side="top", padx=30)
 
+                    assert isinstance(groups_label, ttk.Button), "groups_label should be an instance of ttk.Button"
+
+                assert isinstance(series_label, ttk.Button), "series_label should be an instance of ttk.Button"
+
             # Add a separator between each year
             if i != len(self.years) - 1:
                 separator = ttk.Separator(self, orient="horizontal")
                 separator.pack(fill="x", pady=10)
 
+                assert isinstance(separator, ttk.Separator), "separator should be an instance of ttk.Separator"
+
+            assert isinstance(label, ttk.Button), "label should be an instance of ttk.Button"
+
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_home, style="TButton")
         self.back_button.pack(side="bottom")
 
+        assert isinstance(self.style, ttk.Style), "style should be an instance of ttk.Style"
+        assert isinstance( self.back_button, ttk.Button), " self.back_button should be an instance of ttk.Button"
+
     def go_to_timetable(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(timetable.TimeTablePage)
 
+        assert self.master.current_frame == timetable.TimeTablePage, "Expected current_frame to be set to TimeTablePage"
+
     def go_to_home(self):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
         self.master.switch_frame(home_page.HomePage)
+        assert self.master.current_frame == home_page.HomePage, "Expected current_frame to be set to HomePage"
+

@@ -36,13 +36,18 @@ class AdminPage(tk.Frame):
                                      command=lambda entity_name=name: self.redirect_to_views(entity_name),
                                      style="TButton")
             view_button.pack(side="left")
+            assert isinstance(view_button, ttk.Button), "self.view_buttonshould be an instance of ttk.Button"
+            assert isinstance(name_label, ttk.Label), "name_label should be an instance of ttk.Label"
+            assert isinstance(row_frame, ttk.Frame), "row_frame should be an instance of ttk.Frame"
+
+
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_home, style="TButton")
         self.back_button.pack(side="bottom")
 
         assert isinstance(self.title_label, ttk.Label), "title_label should be an instance of ttk.Label"
-        assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
         assert isinstance(self.style, ttk.Style), "style should be an instance of ttk.Style"
         assert isinstance(self.back_button, ttk.Button), "self.back_button should be an instance of ttk.Button"
+
 
     def redirect_to_views(self, entity_name):
         assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
