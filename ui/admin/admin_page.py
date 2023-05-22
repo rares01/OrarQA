@@ -39,15 +39,33 @@ class AdminPage(tk.Frame):
         self.back_button = ttk.Button(self, text="Back", command=self.go_to_home, style="TButton")
         self.back_button.pack(side="bottom")
 
+        assert isinstance(self.title_label, ttk.Label), "title_label should be an instance of ttk.Label"
+        assert isinstance(self.tree, ttk.Treeview), "self.tree should be an instance of ttk.Treeview"
+        assert isinstance(self.style, ttk.Style), "style should be an instance of ttk.Style"
+        assert isinstance(self.back_button, ttk.Button), "self.back_button should be an instance of ttk.Button"
+
     def redirect_to_views(self, entity_name):
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         if entity_name == "Students":
             self.master.switch_frame(students_view.StudentsView)
+            assert self.master.current_frame == students_view.StudentsView, "Expected current_frame to be set to StudentPage"
 
         elif entity_name == "Disciplines":
             self.master.switch_frame(disciplines_view.DisciplinesView)
+            assert self.master.current_frame == students_view.StudentsView, "Expected current_frame to be set to DisciplinePage"
+
 
         elif entity_name == "Teachers":
             self.master.switch_frame(teachers_view.TeachersView)
+            assert self.master.current_frame == students_view.StudentsView, "Expected current_frame to be set to TeacherPage"
+
 
     def go_to_home(self):
+
+        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
+
         self.master.switch_frame(home.HomePage)
+
+        assert self.master.current_frame == home.HomePage, "Expected current_frame to be set to HomePage"
+
