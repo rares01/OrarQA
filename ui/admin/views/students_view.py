@@ -174,22 +174,14 @@ class StudentsView(tk.Frame):
 
         for i, student in enumerate(filtered_students):
             item_values = self.tree.item(children[i])["values"]
-            assert item_values == (student.id, student.first_name, student.study_year,
-                                   student.semi_year, student.student_group), "Mismatch in treeview item values"
+            assert item_values == [student.id, student.first_name, student.last_name, student.study_year,
+                                   student.semi_year, student.student_group], "Mismatch in treeview item values"
 
     def add_student(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(AddStudentForm)
 
-        assert self.master.current_frame == AddStudentForm, "Expected current_frame to be set to AddStudentForm"
-
     def go_back(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(admin.AdminPage)
-
-        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
 
     def delete_student(self):
         selection = self.tree.selection()

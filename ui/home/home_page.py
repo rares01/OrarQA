@@ -30,18 +30,8 @@ class HomePage(tk.Frame):
         assert isinstance(self.timetable_button, ttk.Button), "self.timetable_button should be an instance of " \
                                                               "ttk.Button"
 
-
-
-
     def go_to_admin_page(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(admin.AdminPage)
-        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
-
 
     def go_to_timetable(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(timetable_page.TimeTablePage)
-        assert self.master.current_frame == timetable_page.TimeTablePage, "Expected current_frame to be set to TimeTablePage"

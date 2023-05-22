@@ -65,14 +65,14 @@ class TestDisciplinesView(unittest.TestCase):
         selected_item = self.view.tree.get_children()[0]
         self.view.tree.selection_set(selected_item)
 
-        self.view.on_tree_select(Mock())
+        self.view.on_tree_select()
 
         self.assertEqual(str(self.view.delete_button["state"]), "enabled")
 
     def test_on_tree_select_no_selection(self):
         self.view.tree.selection_clear()
 
-        self.view.on_tree_select(Mock())
+        self.view.on_tree_select()
 
         self.assertEqual(str(self.view.delete_button["state"]), "disabled")
 

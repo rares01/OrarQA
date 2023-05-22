@@ -97,8 +97,7 @@ class DisciplinesView(tk.Frame):
 
         assert self.disciplines == current_disciplines, "self.disciplines should be set to current_disciplines"
 
-    def on_tree_select(self, event=None):
-        assert isinstance(event, tk.Event) or event is None, "event must be a valid tk.Event object or None."
+    def on_tree_select(self):
         assert isinstance(self.tree, ttk.Treeview), "self.tree must be a valid ttk.Treeview object."
         assert isinstance(self.delete_button, ttk.Button), "self.delete_button must be a valid ttk.Button object."
 
@@ -148,22 +147,14 @@ class DisciplinesView(tk.Frame):
 
         for i, discipline in enumerate(filtered_disciplines):
             item_values = self.tree.item(children[i])["values"]
-            assert item_values == (discipline.id, discipline.name, discipline.study_year,
-                                   discipline.teacher_full_name), "Mismatch in treeview item values"
+            assert item_values == [discipline.id, discipline.name, discipline.study_year,
+                                   discipline.teacher_full_name], "Mismatch in treeview item values"
 
     def add_discipline(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(AddDisciplineForm)
 
-        assert self.master.current_frame == AddDisciplineForm, "Expected current_frame to be set to AddDisciplineForm"
-
     def go_back(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(admin.AdminPage)
-
-        assert self.master.current_frame == admin.AdminPage, "Expected current_frame to be set to AdminPage"
 
     def delete_discipline(self):
         selection = self.tree.selection()

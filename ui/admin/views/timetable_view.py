@@ -276,14 +276,7 @@ class TimetableView(tk.Frame):
                 entry[7]), "Mismatch in treeview item values"
 
     def add_timetable_entry(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(AddTimetableEntryForm)
 
-        assert self.master.current_frame == AddTimetableEntryForm, "Expected current_frame to be set to AddTimetableEntryForm"
-
     def go_back(self):
-        assert hasattr(self.master, "switch_frame"), "self.master should have the 'switch_frame' method"
-
         self.master.switch_frame(home.HomePage)
-        assert self.master.current_frame == home.HomePage, "Expected current_frame to be set to HomePage"
