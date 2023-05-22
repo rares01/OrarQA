@@ -1,20 +1,30 @@
 from dbcontext import connection
 from entities.scheduler_entry import SchedulerEntry
-from repositories.weekdays_repo import get_id_by_value as get_weekday_id
-from repositories.weekdays_repo import get_name_by_id as get_weekday_name
-from repositories.time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
-from repositories.teacher_repo import get_teacher_id_by_full_name as get_teacher_id, get_teacher_full_name_by_id \
-    as get_teacher_full_name
 from repositories.discipline_repo import get_discipline_id_by_value as get_discipline_id, \
     get_discipline_by_id as get_discipline_name
-from repositories.study_year_repo import get_id_by_value as get_study_year_id, get_value_by_id as get_study_year_number
 from repositories.semi_year_repo import get_id_by_value as get_semi_year_id, get_value_by_id as get_semi_year_name
 from repositories.student_group_repo import get_id_by_value as get_student_group_id, \
     get_value_by_id as get_student_group_name
+from repositories.study_year_repo import get_id_by_value as get_study_year_id, get_value_by_id as get_study_year_number
+from repositories.teacher_repo import get_teacher_id_by_full_name as get_teacher_id, get_teacher_full_name_by_id \
+    as get_teacher_full_name
+from repositories.time_slot_repo import get_id_by_value as get_time_slot_id, get_timeslot_by_id as get_time_slot
+from repositories.weekdays_repo import get_id_by_value as get_weekday_id
+from repositories.weekdays_repo import get_name_by_id as get_weekday_name
 
 
 def add_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, semi_year, student_group, scheduler_id):
+    assert weekday is not None
+    assert start_hour is not None
+    assert end_hour is not None
+    assert teacher is not None
+    assert discipline is not None
+    assert study_year is not None
+    assert semi_year is not None
+    assert student_group is not None
+    assert scheduler_id is not None
     conn = connection()
+
     cur = conn.cursor()
 
     weekday_id = get_weekday_id(weekday)
@@ -36,10 +46,11 @@ def add_entry(weekday, start_hour, end_hour, teacher, discipline, study_year, se
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
 
 def get_entry_by_id(entry_id):
+    assert entry_id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -50,9 +61,11 @@ def get_entry_by_id(entry_id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result
 
 
 def fetch_rows(rows):
@@ -82,9 +95,14 @@ def get_entries():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return fetch_rows(rows)
+    result = fetch_rows(rows)
+    assert all(
+        entry[0] is not None and entry[1] is not None and entry[2] is not None and entry[3] is not None and entry[
+            4] is not None and entry[5] is not None and entry[6] is not None and entry[7] is not None for entry in
+        result)
+    return result
 
 
 print(get_entries())
@@ -119,6 +137,11 @@ def get_entries_with_entity():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return fetch_rows_with_entity(rows)
+    result = fetch_rows_with_entity(rows)
+    assert all(
+        entry.id is not None and entry.weekday is not None and entry.scheduler_id is not None and entry.discipline is
+        not None and entry.semi_year is not None and entry.student_group is not None and entry.teacher_id is not None
+        and entry.time_slot is not None for entry in result)
+    return result

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, PropertyMock
 
 from entities.discipline import Discipline
 from repositories.discipline_repo import get_disciplines, get_disciplines_value, add_discipline, delete_discipline, \
@@ -49,6 +49,7 @@ class DisciplineTesting(unittest.TestCase):
                                                                                mock_teacher_method, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect
         mock_study_year_method.side_effect = study_year_method_side_effect
@@ -82,6 +83,7 @@ class DisciplineTesting(unittest.TestCase):
                                                                                                  mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = side_effect_error
         mock_study_year_method.side_effect = study_year_method_side_effect
@@ -97,6 +99,7 @@ class DisciplineTesting(unittest.TestCase):
                                                                                                     mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect
         mock_study_year_method.side_effect = side_effect_error
@@ -108,6 +111,7 @@ class DisciplineTesting(unittest.TestCase):
     def test_given_discipline_repo_when_get_disciplines_value_then_returns_correctly(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_disciplines_value()
@@ -129,6 +133,7 @@ class DisciplineTesting(unittest.TestCase):
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect_2
         mock_study_year_method.side_effect = study_year_method_side_effect_2
+        mock_conn.return_value.closed = 1
 
         add_discipline('SD', 1, 'John Smith')
 
@@ -144,6 +149,7 @@ class DisciplineTesting(unittest.TestCase):
     def test_given_discipline_repo_when_remove_disciplines_then_successful(self, mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
 
         delete_discipline(1)
 
@@ -159,6 +165,7 @@ class DisciplineTesting(unittest.TestCase):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
 
         result = get_discipline_id_by_value("SD")
 
@@ -172,6 +179,7 @@ class DisciplineTesting(unittest.TestCase):
     def test_given_discipline_repo_when_get_disciplines_by_id_then_returns_correctly(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "SD", 1, 1), (2, "IP", 2, 2)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_discipline_by_id(1)

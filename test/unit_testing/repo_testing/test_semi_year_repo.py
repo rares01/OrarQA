@@ -9,6 +9,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_timeslot_repo_when_get_semi_years_values_then_returns_semi_years(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("Spring 2022",), ("Fall 2022",)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = ["Spring 2022", "Fall 2022"]
@@ -24,6 +25,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_semiyear_repo_when_get_id_by_value_with_valid_input_then_returns_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "A")]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = 1
@@ -39,6 +41,7 @@ class StudyYearRepoTesting(unittest.TestCase):
     def test_given_semester_repo_when_get_value_by_id_with_valid_input_then_returns_value(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [('A',)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         expected_result = 'A'

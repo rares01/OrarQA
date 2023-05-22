@@ -144,6 +144,7 @@ class SchedulerEntryTesting(unittest.TestCase):
         mock_time_slot_method.side_effect = get_timeslot_name_side_effect
         mock_discipline_method.side_effect = get_discipline_name_side_effect
         mock_weekday_method.side_effect = get_weekday_name_side_effect
+        mock_conn.return_value.closed = 1
 
         add_entry("Monday", 8, 10, "John Smith", "SD", 1, "A", 101, 1)
 
@@ -182,6 +183,7 @@ class SchedulerEntryTesting(unittest.TestCase):
                                                                                                     mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
         mock_teacher_method.side_effect = teacher_method_side_effect_2
         mock_study_year_method.side_effect = study_year_method_side_effect_2
         mock_student_group_method.side_effect = side_effect_error
@@ -206,6 +208,7 @@ class SchedulerEntryTesting(unittest.TestCase):
     def test_given_scheduler_entry_repo_when_get_entry_by_id_then_successful(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [([8, 10],)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_entry_by_id(1)
@@ -235,6 +238,7 @@ class SchedulerEntryTesting(unittest.TestCase):
                                                                        mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, 1, 1, 1, 1, 1, 1, 1, 1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_teacher_method.side_effect = teacher_method_side_effect
         mock_study_year_method.side_effect = study_year_method_side_effect

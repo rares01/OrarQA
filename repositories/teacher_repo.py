@@ -3,6 +3,7 @@ from entities.teacher import Teacher
 
 
 def get_teacher_full_name_by_id(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -14,7 +15,9 @@ def get_teacher_full_name_by_id(id):
     conn.close()
 
     values = rows[0]
-    return values[0] + " " + values[1]
+    result = values[0] + " " + values[1]
+    assert result is not " "
+    return result
 
 
 def get_teacher_full_names():
@@ -27,16 +30,18 @@ def get_teacher_full_names():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
         teachers.append(row[0] + " " + row[1])
 
+    assert len(teachers) is not None
     return teachers
 
 
 def get_teacher_id_by_full_name(full_name):
+    assert full_name is not None
     first_name, last_name = full_name.split()
     conn = connection()
     assert conn is not None, "Connection unstable"
@@ -47,9 +52,11 @@ def get_teacher_id_by_full_name(full_name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result
 
 
 def get_teachers():
@@ -62,13 +69,15 @@ def get_teachers():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
         teacher = Teacher(*row)
         teachers.append(teacher)
 
+    assert all(
+        entry.id is not None and entry.first_name is not None and entry.last_name is not None for entry in teachers)
     return teachers
 
 
@@ -82,17 +91,21 @@ def get_full_teachers():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
     teachers = []
     for row in rows:
         teacher = Teacher(*row)
         teachers.append(teacher)
 
+    assert all(
+        entry.id is not None and entry.first_name is not None and entry.last_name is not None for entry in teachers)
     return teachers
 
 
 def add_teacher(first_name, last_name):
+    assert first_name is not None
+    assert last_name is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -106,4 +119,4 @@ def add_teacher(first_name, last_name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"

@@ -12,6 +12,7 @@ class WeekdaysRepoTesting(unittest.TestCase):
     def test_given_study_year_repo_when_get_study_year_values_then_returns_study_year_numbers(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [('Monday',), ('Tuesday',), ('Wednesday',)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_weekdays_values()
@@ -26,6 +27,7 @@ class WeekdaysRepoTesting(unittest.TestCase):
     def test_given_weekdays_repo_when_get_name_by_id_then_returns_weekday_name(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(2, 'Monday')]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_name_by_id(2)
@@ -40,6 +42,7 @@ class WeekdaysRepoTesting(unittest.TestCase):
     def test_given_weekdays_repo_when_get_id_by_value_then_returns_weekday_id(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(2,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_id_by_value('Monday')
@@ -56,6 +59,7 @@ class WeekdaysRepoTesting(unittest.TestCase):
     def test_given_weekdays_repo_when_get_id_by_value_with_nonexistent_name_then_raises_error(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = []
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         with self.assertRaises(IndexError):

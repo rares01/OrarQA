@@ -12,12 +12,15 @@ def get_room_values():
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows]
+    result = [row[0] for row in rows]
+    assert all(room[0] is not None and room[1] is not None and room[2] is not None for room in result)
+    return result
 
 
 def get_rooms_by_room_type(room_type):
+    assert room_type is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -27,12 +30,15 @@ def get_rooms_by_room_type(room_type):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows]
+    result = [row[0] for row in rows]
+    assert all(room[0] is not None and room[1] is not None and room[2] is not None for room in result)
+    return result
 
 
 def get_id_by_value(name):
+    assert name is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -42,12 +48,15 @@ def get_id_by_value(name):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result
 
 
 def get_value_by_id(id):
+    assert id is not None
     conn = connection()
     assert conn is not None, "Connection unstable"
     cur = conn.cursor()
@@ -57,9 +66,8 @@ def get_value_by_id(id):
 
     cur.close()
     conn.close()
-    assert conn.closed() == 1, "Connection is not closed"
+    assert conn.closed == 1, "Connection is not closed"
 
-    return [row[0] for row in rows][0]
-
-
-
+    result = [row[0] for row in rows][0]
+    assert result is not None
+    return result

@@ -29,13 +29,13 @@ def handle(weekday_entry=None, time_slot_entry=None, teacher_entry=None, discipl
     assert semi_year.isalpha(), "Semi year should be a letter"
     assert student_group.isnumeric(), "Student group should be a number"
     assert int(end_hour) - int(start_hour) == 2, "Course duration is 2 hours!"
-    assert teacher.split()[0].issuper() and teacher.split()[0].isalpha() and teacher.split()[1].issuper() and \
+    assert teacher.split()[0][0].isupper() and teacher.split()[0].isalpha() and teacher.split()[1][0].isupper() and \
            teacher.split()[1].isalpha(), "First name and Last name of a teacher " \
                                          "should be with capitals and separated " \
                                          "with a space "
     add_entry(weekday=weekday, start_hour=start_hour, end_hour=end_hour, teacher=teacher, discipline=discipline,
               study_year=study_year, semi_year=semi_year, student_group=student_group, scheduler_id=1)
-    assert any(entry.weekday == weekday and entry.discipline == discipline for entry in get_entries())
+    assert any(entry[1] == weekday and entry[4] == discipline for entry in get_entries())
 
 
 class AddTimetableEntryForm(tk.Frame):

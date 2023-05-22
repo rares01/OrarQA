@@ -10,6 +10,7 @@ class TestSchedulerRepo(unittest.TestCase):
     def test_given_scheduler_repo_when_add_entry_with_valid_input_then_adds_entry(self, mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
 
         id = 1
         add_entry(id)

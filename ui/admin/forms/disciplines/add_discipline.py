@@ -22,7 +22,7 @@ class AddDisciplineForm(tk.Frame):
         year = year_entry.get()
         teacher = teacher_entry.get()
         assert year.isnumeric(), "Study year should be a number"
-        assert teacher.split()[0].issuper() and teacher.split()[0].isalpha() and teacher.split()[1].issuper() and \
+        assert teacher.split()[0][0].isupper() and teacher.split()[0].isalpha() and teacher.split()[1][0].isupper() and \
                teacher.split()[1].isalpha(), "First name and Last name of a teacher " \
                                              "should be with capitals and separated " \
                                              "with a space "

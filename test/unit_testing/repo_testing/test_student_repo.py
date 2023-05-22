@@ -61,6 +61,7 @@ class StudentTesting(unittest.TestCase):
                                                                   mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "John", "Smith", 1, 1, 1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_study_year_method.side_effect = study_year_method_side_effect
         mock_student_group_method.side_effect = get_student_group_id_side_effect
@@ -93,6 +94,7 @@ class StudentTesting(unittest.TestCase):
                                                                                                mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1, "John", "Smith", 1, 1, 1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_study_year_method.side_effect = study_year_method_side_effect
         mock_student_group_method.side_effect = side_effect_error
@@ -115,6 +117,7 @@ class StudentTesting(unittest.TestCase):
                                                                  mock_study_year_method,
                                                                  mock_conn):
         mock_cursor = MagicMock()
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
         mock_study_year_method.side_effect = study_year_method_side_effect_2
         mock_student_group_method.side_effect = get_student_group_name_side_effect
@@ -137,6 +140,7 @@ class StudentTesting(unittest.TestCase):
                                                                     mock_conn):
         mock_cursor = MagicMock()
         mock_conn.return_value.cursor.return_value = mock_cursor
+        mock_conn.return_value.closed = 1
 
         delete_student(1)
 

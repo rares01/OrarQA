@@ -9,6 +9,7 @@ class RoomTypeRepoTesting(unittest.TestCase):
     def test_given_room_type_repo_when_get_room_type_values_then_returns_room_type_names(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [("Course",), ("Laboratory",), ("Seminary",)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_room_type_values()
@@ -26,6 +27,7 @@ class RoomTypeRepoTesting(unittest.TestCase):
     def test_given_room_type_repo_when_get_id_by_value_then_returns_room_type_names(self, mock_conn):
         mock_cursor = MagicMock()
         mock_cursor.fetchall.return_value = [(1,)]
+        mock_conn.return_value.closed = 1
         mock_conn.return_value.cursor.return_value = mock_cursor
 
         result = get_id_by_value("Course")

@@ -149,4 +149,5 @@ class StudentsView(tk.Frame):
         if selection:
             values = self.tree.item(selection)["values"]
             delete_student(values[0])
+            assert all(student.id is not values[0] for student in get_students())
         self.update_treeview(get_students())
